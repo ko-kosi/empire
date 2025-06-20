@@ -1,60 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Chosen Palette: "Warm Neutral" with Purple Accent -->
+    <!-- Application Structure Plan: A multi-section, single-page application design. The structure includes: 1. A welcoming hero section with an overview. 2. A tab-based navigation for "Core Features", "User Flows", and "Technical Architecture". This tabbed approach was chosen for its user-friendly nature, allowing users to easily switch between different aspects of the documentation without scrolling extensively. It promotes focused exploration of specific topics. 3. Interactive cards within the "Core Features" section provide detailed information on demand. 4. A visual, step-by-step diagram in the "User Flows" section clarifies complex processes. 5. A dynamic chart in "Technical Architecture" visualizes the technology stack. This structure ensures a logical and intuitive user journey, making the documentation more accessible and engaging than a linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Hero Section (Inform): A welcoming text block to introduce the platform.
+        - Core Features (Organize/Inform): Interactive cards (HTML/CSS/JS) to present features in a structured and engaging way. Each card is a self-contained unit of information.
+        - User Flows (Organize/Change): A custom-built, interactive diagram using HTML/CSS/JS to illustrate the flow from registration to transaction. This is more intuitive than a simple list or text description.
+        - Technical Architecture (Inform/Compare): A dynamic doughnut chart (Chart.js/Canvas) to visually represent the technology stack, allowing for quick comparison of front-end, back-end, and database components. A summary table provides additional details. This is more impactful than a simple list of technologies.
+        - Roadmap (Inform): A clean, organized list to present future plans.
+        - All interactions are designed to be intuitive (click to reveal, hover for highlights) to enhance user engagement and understanding.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Documentation: KnowEmpire Marketplace</title>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!-- 
-        Chosen Palette: Calm Neutral Teal
-        Application Structure Plan: A dashboard-style layout with a fixed sidebar for navigation between key documentation concepts (Overview, User Flows, Product Lifecycle, API Explorer, Key Features). This structure is chosen to break down the dense documentation into logical, explorable themes, allowing a user (like a developer or stakeholder) to quickly access the information they need without linear reading. The interactive flow diagrams and API explorer are designed to make the technical architecture more tangible and understandable than static text.
-        Visualization & Content Choices:
-        - Report Info: Overall App Concept -> Goal: Inform -> Viz: Thematic Sections -> Interaction: Sidebar Navigation -> Justification: Provides a high-level, structured entry point into the app's architecture.
-        - Report Info: User/Product Flows -> Goal: Organize/Explain Process -> Viz: Custom HTML/CSS Flow Diagrams -> Interaction: Clickable steps to reveal details -> Justification: Visually demonstrates the sequence of events and user journeys more effectively than text, without using SVG/Mermaid.
-        - Report Info: Backend Endpoints List -> Goal: Organize/Detail -> Viz: Interactive Accordion List -> Interaction: Click to expand/collapse endpoint details -> Justification: A standard, user-friendly pattern for API documentation that allows for both a quick overview and in-depth exploration.
-        - Report Info: Feature & Data Distribution -> Goal: Compare/Summarize -> Viz: Chart.js Donut/Bar Charts -> Interaction: Tooltips on hover -> Justification: Provides a quick quantitative snapshot of the app's components (e.g., breakdown of API types, feature categories).
-        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
-    -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8F7F4; /* Warm Neutral Background */
-            color: #333333;
+            background-color: #f4f4f5; /* Warm Neutral 100 */
         }
-        :root {
-            --accent-color: #4A90E2; /* Muted Blue/Teal Accent */
-            --accent-color-hover: #357ABD;
-            --bg-light: #FFFFFF;
-            --bg-neutral: #F8F7F4;
-            --border-color: #E0E0E0;
-            --text-primary: #333333;
-            --text-secondary: #757575;
-            --text-accent: #4A90E2;
-        }
-        .sidebar-link.active {
-            background-color: var(--accent-color);
+        .tab-button.active {
+            background-color: #7c3aed; /* Purple 600 */
             color: white;
         }
-        .sidebar-link.active .material-icons {
-            color: white;
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flow-step {
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .flow-step:hover {
+            background-color: #ede9fe; /* Purple 100 */
+            border-color: #7c3aed; /* Purple 600 */
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px; /* Constrain chart width */
             margin-left: auto;
             margin-right: auto;
             height: 300px;
@@ -65,501 +57,286 @@
                 height: 350px;
             }
         }
-        /* Custom styles for API endpoint methods */
-        .api-method {
-            font-family: monospace;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.8rem;
-        }
-        .api-get { background-color: #2196F3; } /* Blue */
-        .api-post { background-color: #4CAF50; } /* Green */
-        .api-put { background-color: #FFC107; } /* Amber */
-        .api-delete { background-color: #F44336; } /* Red */
-        
-        .flow-arrow {
-            color: var(--border-color);
-        }
-        .flow-step:hover .flow-icon {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        .flow-step:hover .flow-title {
-            color: var(--accent-color);
-        }
-        .api-endpoint-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-        .api-endpoint.open .api-endpoint-details {
-            max-height: 500px; /* Adjust as needed */
-        }
-        .api-endpoint.open .material-icons {
-            transform: rotate(90deg);
-        }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-stone-100 text-stone-800">
 
-    <div class="flex h-screen bg-gray-100">
-        <!-- Sidebar Navigation -->
-        <aside class="hidden md:flex flex-col w-64 bg-white shadow-lg">
-            <div class="flex items-center justify-center h-16 bg-white shadow-md">
-                <span class="text-xl font-bold text-[var(--accent-color)]">KnowEmpire Docs</span>
-            </div>
-            <nav class="flex-1 px-2 py-4 space-y-2">
-                <a href="#overview" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="material-icons text-[var(--text-accent)]">visibility</span>
-                    <span class="mx-4 font-medium">Overview</span>
-                </a>
-                <a href="#user-flows" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="material-icons text-[var(--text-accent)]">account_tree</span>
-                    <span class="mx-4 font-medium">User Flows</span>
-                </a>
-                <a href="#key-features" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="material-icons text-[var(--text-accent)]">star</span>
-                    <span class="mx-4 font-medium">Key Features</span>
-                </a>
-                <a href="#api-explorer" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="material-icons text-[var(--text-accent)]">code</span>
-                    <span class="mx-4 font-medium">API Explorer</span>
-                </a>
-                <a href="#data-models" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="material-icons text-[var(--text-accent)]">data_object</span>
-                    <span class="mx-4 font-medium">Data Models</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="flex items-center justify-between h-16 px-6 bg-white border-b md:justify-end">
-                <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
-                    <span class="material-icons">menu</span>
-                </button>
-                <div class="text-lg font-semibold text-gray-800" id="header-title">Overview</div>
-            </header>
-
-            <!-- Mobile Sidebar -->
-            <div id="mobile-menu" class="hidden md:hidden absolute top-0 left-0 h-full w-64 bg-white z-20 shadow-xl">
-                 <nav class="flex-1 px-2 py-4 space-y-2">
-                    <a href="#overview" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md">
-                        <span class="material-icons text-[var(--text-accent)]">visibility</span>
-                        <span class="mx-4 font-medium">Overview</span>
-                    </a>
-                    <a href="#user-flows" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md">
-                        <span class="material-icons text-[var(--text-accent)]">account_tree</span>
-                        <span class="mx-4 font-medium">User Flows</span>
-                    </a>
-                    <a href="#key-features" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md">
-                        <span class="material-icons text-[var(--text-accent)]">star</span>
-                        <span class="mx-4 font-medium">Key Features</span>
-                    </a>
-                    <a href="#api-explorer" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md">
-                        <span class="material-icons text-[var(--text-accent)]">code</span>
-                        <span class="mx-4 font-medium">API Explorer</span>
-                    </a>
-                     <a href="#data-models" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-md">
-                        <span class="material-icons text-[var(--text-accent)]">data_object</span>
-                        <span class="mx-4 font-medium">Data Models</span>
-                    </a>
-                </nav>
-            </div>
-
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--bg-neutral)] p-4 sm:p-6 md:p-8">
-                <!-- Section: Overview -->
-                <section id="overview" class="app-section">
-                    <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-4">Application Overview</h2>
-                    <p class="text-lg text-[var(--text-secondary)] mb-6">
-                        This interactive document provides a dynamic overview of the KnowEmpire Marketplace. The platform is a peer-to-peer (P2P) hub designed for trustless trading of goods and services within the Farcaster ecosystem. It connects buyers and sellers securely, leveraging a custom token ($KNOW), an escrow system (simulated), and AI-powered tools to enhance user listings.
-                    </p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">Product Category Breakdown</h3>
-                            <p class="text-[var(--text-secondary)] mb-4">The marketplace supports three primary product categories. This chart shows a sample distribution.</p>
-                            <div class="chart-container">
-                                <canvas id="productCategoriesChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">API Endpoint Distribution</h3>
-                            <p class="text-[var(--text-secondary)] mb-4">The backend is structured around several core resources. This chart visualizes the number of endpoints per resource.</p>
-                            <div class="chart-container">
-                                <canvas id="apiEndpointsChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section: User Flows -->
-                <section id="user-flows" class="app-section hidden">
-                    <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-6">Core User Flows</h2>
-                    <div class="space-y-12">
-                        <!-- Seller Flow -->
-                        <div>
-                            <h3 class="text-2xl font-semibold mb-4 text-[var(--text-accent)]">Seller Journey</h3>
-                             <p class="text-lg text-[var(--text-secondary)] mb-6">The seller journey focuses on listing products and managing interactions. Key steps include registration, product creation with optional AI enhancements, and responding to buyer notifications. Click a step to see details.</p>
-                            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">person_add</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">1. Register</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">add_shopping_cart</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">2. Post Product (AI Tools)</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">notifications_active</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">3. Receive Notification</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">send</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">4. Respond to Buyer</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Buyer Flow -->
-                        <div>
-                            <h3 class="text-2xl font-semibold mb-4 text-[var(--text-accent)]">Buyer Journey</h3>
-                             <p class="text-lg text-[var(--text-secondary)] mb-6">The buyer's journey is centered around discovering products and making secure, simulated purchases. This involves Browse, initiating contact or purchase, and receiving confirmations.</p>
-                            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">search</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">1. Browse & Filter</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">chat</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">2. Inquire / Request</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">credit_card</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">3. Simulated Purchase</h4>
-                                </div>
-                                <div class="text-3xl font-light flow-arrow">→</div>
-                                <div class="flow-step cursor-pointer text-center p-4">
-                                    <div class="flow-icon flex items-center justify-center w-16 h-16 mx-auto bg-gray-200 rounded-full text-2xl text-[var(--text-accent)] transition-colors">
-                                        <span class="material-icons">download</span>
-                                    </div>
-                                    <h4 class="flow-title mt-2 font-semibold transition-colors">4. Receive Product</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section: Key Features -->
-                <section id="key-features" class="app-section hidden">
-                    <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-6">Key Application Features</h2>
-                    <p class="text-lg text-[var(--text-secondary)] mb-8">The platform is built on several core features that create a comprehensive marketplace experience. These include a points-based reward system, AI-powered tools for sellers, and a robust notification system to keep users informed.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">auto_awesome</span>
-                            <h3 class="text-xl font-semibold mb-2">AI Content Generation</h3>
-                            <p class="text-[var(--text-secondary)]">Sellers can use the Gemini 2.0 Flash API to automatically enhance product descriptions and generate catchy headlines, improving the quality and appeal of their listings.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">military_tech</span>
-                            <h3 class="text-xl font-semibold mb-2">Know Points System</h3>
-                            <p class="text-[var(--text-secondary)]">Users are rewarded for engagement. They earn "Know Points" for daily logins (streaks) and for every successful transaction they complete, fostering a loyal user base.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">notifications</span>
-                            <h3 class="text-xl font-semibold mb-2">Interactive Notifications</h3>
-                            <p class="text-[var(--text-secondary)]">A detailed notification system informs both buyers and sellers of key events, such as inquiries, purchase confirmations, and service agreements, with actionable buttons.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">hub</span>
-                            <h3 class="text-xl font-semibold mb-2">Multi-Category Support</h3>
-                            <p class="text-[var(--text-secondary)]">The platform is designed to handle physical "Goods," downloadable "Digital" products, and bookable "Services," each with its own unique interaction and transaction flow.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">group_add</span>
-                            <h3 class="text-xl font-semibold mb-2">Referral Program</h3>
-                            <p class="text-[var(--text-secondary)]">A built-in referral system (simulated) is designed to encourage viral growth by rewarding users for inviting others to the platform.</p>
-                        </div>
-                         <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                            <span class="material-icons text-4xl text-[var(--text-accent)] mb-3">security</span>
-                            <h3 class="text-xl font-semibold mb-2">Trustless Escrow (Simulated)</h3>
-                            <p class="text-[var(--text-secondary)]">The core architecture is based on the concept of trustless transactions, where funds are held in a simulated escrow until both parties are satisfied, ensuring security.</p>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Section: API Explorer -->
-                <section id="api-explorer" class="app-section hidden">
-                    <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-6">API Endpoint Explorer</h2>
-                    <p class="text-lg text-[var(--text-secondary)] mb-8">The application's functionality is powered by a RESTful API. Below is an interactive list of the core endpoints. Click on any endpoint to expand its details, including the HTTP method, description, and example data payloads.</p>
-                    <div id="api-list" class="space-y-4">
-                        <!-- API endpoints will be dynamically inserted here by JavaScript -->
-                    </div>
-                </section>
-
-                <!-- Section: Data Models -->
-                <section id="data-models" class="app-section hidden">
-                    <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-6">Core Data Models</h2>
-                     <p class="text-lg text-[var(--text-secondary)] mb-8">The application relies on several key data structures to function. Understanding these models is essential for development and integration. Here are the primary data objects used throughout the platform.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Product Model -->
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                             <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">Product Model</h3>
-                             <pre class="bg-gray-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code>{
-    "id": "PROD-XYZ123",
-    "name": "string",
-    "desc": "string",
-    "price": "number",
-    "category": "'goods' | 'services' | 'digital'",
-    "image": "string (URL or base64)",
-    "location": "string",
-    "sellerHandle": "string",
-    "sellerEmail": "string (email)",
-    "digitalType?": "'ebook' | 'software' | ...",
-    "digitalFile?": "string (filename)"
-}</code></pre>
-                        </div>
-                        <!-- Notification Model -->
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
-                             <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">Notification Model</h3>
-                             <pre class="bg-gray-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code>{
-    "id": "number (timestamp)",
-    "type": "string (e.g., 'Goods Order Inquiry')",
-    "productId": "string",
-    "productName": "string",
-    "buyerEmail": "string (email)",
-    "sellerEmail": "string (email)",
-    "timestamp": "string (ISO)",
-    "isRead": "boolean",
-    "status?": "'pending' | 'accepted' | 'agreed'",
-    "...other fields based on type"
-}</code></pre>
-                        </div>
-                    </div>
-                </section>
-            </main>
+    <!-- Hero Section -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-purple-700">KnowEmpire Marketplace</h1>
+            <p class="mt-4 text-lg md:text-xl text-stone-600">An Interactive Guide to Our P2P Platform</p>
+            <p class="mt-2 max-w-2xl mx-auto text-stone-500">
+                This document provides a comprehensive, explorable overview of the KnowEmpire Marketplace, from its core features and user flows to its technical architecture. Click through the tabs and interactive elements to learn more.
+            </p>
         </div>
-    </div>
+    </header>
+
+    <main class="container mx-auto p-6 mt-8">
+        <!-- Tab Navigation -->
+        <div class="mb-8 flex justify-center border-b border-stone-300">
+            <button data-tab="features" class="tab-button text-lg font-medium px-6 py-3 text-stone-600 rounded-t-lg active">Core Features</button>
+            <button data-tab="flows" class="tab-button text-lg font-medium px-6 py-3 text-stone-600 rounded-t-lg">User Flows</button>
+            <button data-tab="tech" class="tab-button text-lg font-medium px-6 py-3 text-stone-600 rounded-t-lg">Technical Architecture</button>
+            <button data-tab="roadmap" class="tab-button text-lg font-medium px-6 py-3 text-stone-600 rounded-t-lg">Roadmap</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-content">
+            <!-- Core Features Section -->
+            <section id="features" class="tab-pane active">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-800">Platform Features</h2>
+                    <p class="mt-2 text-stone-500 max-w-xl mx-auto">Click on any feature card to explore the tools available for Buyers, Sellers, and the general platform functionalities.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Seller Features -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4 text-center">For Sellers</h3>
+                        <div class="space-y-4">
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Effortless Registration</h4>
+                                <p class="text-sm text-stone-600 hidden">A straightforward onboarding process allows users to register by defining their primary offering category (Goods, Digital, Services).</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Intuitive Product Listing</h4>
+                                <p class="text-sm text-stone-600 hidden">Sellers can easily post new products, providing essential details like name, description, price, category, and an image.</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Real-time Notifications</h4>
+                                <p class="text-sm text-stone-600 hidden">Sellers receive instant notifications for critical events, including new buyer inquiries, successful purchases, and new service requests.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Buyer Features -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4 text-center">For Buyers</h3>
+                        <div class="space-y-4">
+                           <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Simple Registration</h4>
+                                <p class="text-sm text-stone-600 hidden">A quick registration process enables users to instantly become buyers and begin exploring the marketplace.</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Dynamic Product Browse</h4>
+                                <p class="text-sm text-stone-600 hidden">Buyers can browse all available products and services, with convenient filtering options by category to find exactly what they need.</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Seamless Interactions</h4>
+                                <p class="text-sm text-stone-600 hidden">Initiate order inquiries for goods, directly purchase digital products with instant download access, or submit detailed service requests.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- General Features -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4 text-center">Platform Features</h3>
+                        <div class="space-y-4">
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Know Points System</h4>
+                                <p class="text-sm text-stone-600 hidden">Earn valuable Know Points for daily logins and completing successful transactions, tracked on your user profile.</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Search by ID</h4>
+                                <p class="text-sm text-stone-600 hidden">Quickly locate specific products or transactions by entering their unique Product ID or Transaction ID.</p>
+                            </div>
+                            <div class="feature-card p-4 border border-stone-200 rounded-lg cursor-pointer" onclick="showFeatureDetail(this)">
+                                <h4 class="font-bold text-lg">Leaderboard</h4>
+                                <p class="text-sm text-stone-600 hidden">A dynamic leaderboard showcases the top Know Points holders, encouraging engagement and friendly competition.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Flows Section -->
+            <section id="flows" class="tab-pane hidden">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-800">User Transaction Flow (Goods)</h2>
+                    <p class="mt-2 text-stone-500 max-w-xl mx-auto">This diagram illustrates the step-by-step interaction between a buyer and a seller for a typical physical goods transaction. Hover over each step for more details.</p>
+                </div>
+                <div class="space-y-4">
+                    <!-- Buyer initiates -->
+                    <div class="flow-step bg-white p-4 rounded-lg shadow border-l-4 border-stone-200">
+                        <h4 class="font-bold text-lg">1. Buyer: Initiates Order</h4>
+                        <p class="text-sm text-stone-600">The buyer finds a physical good and clicks "Buy Now" or "Chat Seller", specifying the desired quantity.</p>
+                    </div>
+                    <div class="text-center text-2xl text-purple-500">↓</div>
+                    <!-- Seller receives -->
+                    <div class="flow-step bg-white p-4 rounded-lg shadow border-l-4 border-stone-200">
+                        <h4 class="font-bold text-lg">2. Seller: Receives Inquiry</h4>
+                        <p class="text-sm text-stone-600">The seller receives an "Order Inquiry" notification with details of the buyer's request.</p>
+                    </div>
+                    <div class="text-center text-2xl text-purple-500">↓</div>
+                    <!-- Seller confirms -->
+                    <div class="flow-step bg-white p-4 rounded-lg shadow border-l-4 border-stone-200">
+                        <h4 class="font-bold text-lg">3. Seller: Confirms Availability</h4>
+                        <p class="text-sm text-stone-600">The seller accepts the inquiry, which sends a "Goods Availability Confirmed" notification to the buyer.</p>
+                    </div>
+                    <div class="text-center text-2xl text-purple-500">↓</div>
+                    <!-- Buyer pays -->
+                    <div class="flow-step bg-white p-4 rounded-lg shadow border-l-4 border-stone-200">
+                        <h4 class="font-bold text-lg">4. Buyer: Completes Purchase</h4>
+                        <p class="text-sm text-stone-600">The buyer receives the confirmation, proceeds to the payment modal, and completes the simulated transaction.</p>
+                    </div>
+                     <div class="text-center text-2xl text-purple-500">↓</div>
+                     <!-- Notifications sent -->
+                    <div class="flow-step bg-white p-4 rounded-lg shadow border-l-4 border-stone-200">
+                        <h4 class="font-bold text-lg">5. System: Final Notifications</h4>
+                        <p class="text-sm text-stone-600">Both the buyer and seller receive a "Goods Purchased" notification, and the buyer earns 200 Know Points.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Architecture Section -->
+            <section id="tech" class="tab-pane hidden">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-800">Technical Architecture</h2>
+                    <p class="mt-2 text-stone-500 max-w-xl mx-auto">This application is built with standard web technologies, emphasizing a client-side simulation. Below is a breakdown of the technology stack.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="techStackChart"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">Stack Components</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-purple-600 font-bold w-28 flex-shrink-0">Front-End:</span>
+                                <span class="text-stone-700">HTML5, Tailwind CSS, Vanilla JavaScript (ES6+). No heavy frameworks for this simulation.</span>
+                            </li>
+                             <li class="flex items-start">
+                                <span class="text-purple-600 font-bold w-28 flex-shrink-0">Data Storage:</span>
+                                <span class="text-stone-700">Browser `localStorage` is used to simulate a database for users, products, and notifications.</span>
+                            </li>
+<!--                              <li class="flex items-start">
+                                <span class="text-purple-600 font-bold w-28 flex-shrink-0">AI (Simulated):</span>
+                                <span class="text-stone-700">Designed for future integration with Google's Gemini API for content generation tasks.</span>
+                            </li> -->
+                             <li class="flex items-start">
+                                <span class="text-purple-600 font-bold w-28 flex-shrink-0">Transactions:</span>
+                                <span class="text-stone-700">All payment and escrow processes are simulated on the client-side for demonstration purposes.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- Roadmap Section -->
+            <section id="roadmap" class="tab-pane hidden">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-800">Future Development Roadmap</h2>
+                    <p class="mt-2 text-stone-500 max-w-xl mx-auto">KnowEmpire is designed for growth. Here are the key areas for future enhancement to transition from a simulation to a fully-fledged platform.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow max-w-3xl mx-auto">
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                             <span class="text-purple-600 text-xl mr-4">▶</span>
+                             <span class="text-stone-700"><strong>Full Blockchain Integration:</strong> Implement smart contracts for decentralized escrow and real $KNOW token transactions.</span>
+                        </li>
+                         <li class="flex items-center">
+                             <span class="text-purple-600 text-xl mr-4">▶</span>
+                             <span class="text-stone-700"><strong>Real-time Communication:</strong> Integrate a live chat system for direct messaging between buyers and sellers.</span>
+                        </li>
+                         <li class="flex items-center">
+                             <span class="text-purple-600 text-xl mr-4">▶</span>
+                             <span class="text-stone-700"><strong>Advanced User Profiles:</strong> Expand profiles to include reputation systems and comprehensive transaction histories.</span>
+                        </li>
+                         <li class="flex items-center">
+                             <span class="text-purple-600 text-xl mr-4">▶</span>
+                             <span class="text-stone-700"><strong>Robust User Authentication:</strong> Implement secure, potentially Web3 wallet-based, authentication.</span>
+                        </li>
+                          <li class="flex items-center">
+                             <span class="text-purple-600 text-xl mr-4">▶</span>
+                             <span class="text-stone-700"><strong>Seller Analytics Dashboard:</strong> Provide sellers with data-driven insights into their listings' performance.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- DATA ---
-            const apiEndpoints = [
-                {
-                    category: 'User Authentication & Profile',
-                    endpoints: [
-                        { method: 'POST', path: '/api/auth/register', description: 'Registers a new user (buyer or seller).' },
-                        { method: 'POST', path: '/api/auth/login', description: 'Authenticates an existing user.' },
-                        { method: 'GET', path: '/api/users/profile', description: 'Retrieves the current authenticated user\'s profile.' },
-                        { method: 'PUT', path: '/api/users/profile', description: 'Updates the current authenticated user\'s profile.' }
-                    ]
-                },
-                {
-                    category: 'Product Management (Sellers)',
-                    endpoints: [
-                        { method: 'POST', path: '/api/products', description: 'Creates a new product listing.' },
-                        { method: 'GET', path: '/api/products/my-listings', description: 'Retrieves all products listed by the authenticated seller.' },
-                        { method: 'PUT', path: '/api/products/:productId', description: 'Updates an existing product listing.' },
-                        { method: 'DELETE', path: '/api/products/:productId', description: 'Deletes a product listing.' }
-                    ]
-                },
-                {
-                    category: 'Marketplace & Transactions',
-                    endpoints: [
-                        { method: 'GET', path: '/api/products', description: 'Retrieves all available products (with filters).' },
-                        { method: 'GET', path: '/api/products/:productId', description: 'Retrieves detailed information for a single product.' },
-                        { method: 'POST', path: '/api/orders/inquire-goods', description: 'Sends an inquiry to a seller for a goods product.' },
-                        { method: 'POST', path: '/api/orders/purchase-digital', description: 'Processes the purchase of a digital product.' },
-                        { method: 'POST', path: '/api/orders/request-service', description: 'Submits a service request to a seller.' }
-                    ]
-                },
-                {
-                    category: 'Notification System',
-                    endpoints: [
-                        { method: 'GET', path: '/api/notifications', description: 'Retrieves all notifications for the authenticated user.' },
-                        { method: 'PUT', path: '/api/notifications/:notificationId/read', description: 'Marks a specific notification as read.' },
-                        { method: 'POST', path: '/api/notifications/respond', description: 'Allows sellers to respond to inquiries/requests.' }
-                    ]
-                }
-            ];
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const panes = document.querySelectorAll('.tab-pane');
 
-            // --- STATE & ELEMENTS ---
-            const sections = document.querySelectorAll('.app-section');
-            const navLinks = document.querySelectorAll('.sidebar-link');
-            const headerTitle = document.getElementById('header-title');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Deactivate all tabs and panes
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panes.forEach(p => {
+                        p.classList.add('hidden');
+                        p.classList.remove('active');
+                    });
 
-            // --- FUNCTIONS ---
-            function updateActiveSection() {
-                const hash = window.location.hash || '#overview';
-                sections.forEach(section => {
-                    if (`#${section.id}` === hash) {
-                        section.classList.remove('hidden');
-                    } else {
-                        section.classList.add('hidden');
+                    // Activate the clicked tab and corresponding pane
+                    tab.classList.add('active');
+                    const targetPaneId = tab.getAttribute('data-tab');
+                    const targetPane = document.getElementById(targetPaneId);
+                    if (targetPane) {
+                        targetPane.classList.remove('hidden');
+                        targetPane.classList.add('active');
                     }
                 });
+            });
 
-                navLinks.forEach(link => {
-                    if (link.getAttribute('href') === hash) {
-                        link.classList.add('active');
-                        headerTitle.textContent = link.querySelector('span.mx-4').textContent;
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-                
-                // Close mobile menu on navigation
-                mobileMenu.classList.add('hidden');
-            }
-
-            function renderApiEndpoints() {
-                const apiListContainer = document.getElementById('api-list');
-                if (!apiListContainer) return;
-                
-                let html = '';
-                apiEndpoints.forEach(group => {
-                    html += `<h3 class="text-2xl font-semibold mt-8 mb-4 text-[var(--text-accent)]">${group.category}</h3>`;
-                    html += '<div class="space-y-2">';
-                    group.endpoints.forEach(endpoint => {
-                        html += `
-                            <div class="api-endpoint bg-white rounded-lg shadow-sm border border-[var(--border-color)] overflow-hidden">
-                                <div class="flex items-center justify-between p-4 cursor-pointer">
-                                    <div class="flex items-center gap-4">
-                                        <span class="api-method api-${endpoint.method.toLowerCase()}">${endpoint.method}</span>
-                                        <span class="font-mono text-sm md:text-base text-gray-800">${endpoint.path}</span>
-                                    </div>
-                                    <span class="material-icons text-gray-400 transition-transform">chevron_right</span>
-                                </div>
-                                <div class="api-endpoint-details bg-gray-50 border-t border-[var(--border-color)] p-4">
-                                    <p class="text-[var(--text-secondary)]">${endpoint.description}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                });
-                apiListContainer.innerHTML = html;
-
-                // Add event listeners for accordion
-                apiListContainer.querySelectorAll('.api-endpoint').forEach(item => {
-                    item.addEventListener('click', () => {
-                        item.classList.toggle('open');
-                    });
-                });
-            }
-
-            function createCharts() {
-                // Product Categories Chart
-                const ctxCategories = document.getElementById('productCategoriesChart')?.getContext('2d');
-                if (ctxCategories) {
-                    new Chart(ctxCategories, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Goods', 'Services', 'Digital Products'],
-                            datasets: [{
-                                label: 'Product Categories',
-                                data: [45, 35, 20],
-                                backgroundColor: ['#4A90E2', '#50E3C2', '#F5A623'],
-                                borderColor: 'white',
-                                borderWidth: 2,
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                }
-                            }
-                        }
-                    });
-                }
-
-                // API Endpoints Chart
-                const ctxApi = document.getElementById('apiEndpointsChart')?.getContext('2d');
-                if (ctxApi) {
-                    new Chart(ctxApi, {
-                        type: 'bar',
-                        data: {
-                            labels: apiEndpoints.map(g => g.category),
-                            datasets: [{
-                                label: '# of Endpoints',
-                                data: apiEndpoints.map(g => g.endpoints.length),
-                                backgroundColor: '#4A90E2',
-                                borderRadius: 4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            indexAxis: 'y',
-                            scales: {
-                                x: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        display: false
-                                    }
+            // Initialize Chart.js
+            const ctx = document.getElementById('techStackChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Front-End (JS, CSS)', 'Data Storage (LocalStorage)', 'Simulated AI & Transactions'],
+                    datasets: [{
+                        label: 'Technology Stack Distribution',
+                        data: [50, 30, 20],
+                        backgroundColor: [
+                            '#8b5cf6', // Purple 500
+                            '#a78bfa', // Purple 400
+                            '#d8b4fe'  // Purple 300
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14
                                 },
-                                y: {
-                                     grid: {
-                                        display: false
+                                color: '#44403c' // Stone 700
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
                                     }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    display: false
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
                                 }
                             }
                         }
-                    });
+                    }
                 }
-            }
-            
-            // --- EVENT LISTENERS ---
-            window.addEventListener('hashchange', updateActiveSection);
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    // This allows the hashchange event to handle the logic
-                    // and ensures mobile menu closes after a click.
-                     mobileMenu.classList.add('hidden');
-                });
             });
-
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-
-            // --- INITIALIZATION ---
-            updateActiveSection();
-            renderApiEndpoints();
-            createCharts();
         });
+
+        function showFeatureDetail(element) {
+            const detail = element.querySelector('p');
+            // Toggle visibility of the detail paragraph
+            detail.classList.toggle('hidden');
+            // Add a visual cue to the card
+            element.classList.toggle('bg-purple-50');
+        }
     </script>
+
 </body>
 </html>
