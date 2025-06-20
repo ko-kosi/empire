@@ -992,17 +992,18 @@
     .buyer-product-card .chat-seller-btn {
         background: #e0e7ff;
         color: #6366f1;
+        border: none;
     }
     .buyer-product-card .chat-seller-btn:active {
         background: #c5d0f5;
     }
     /* Product Detail Modal */
-    #product-detail-modal .modal-form {
+    #product-detail-modal .modal-form, #search-results-modal .modal-form {
       max-width: 90vw;
       width: 500px;
       padding: 24px;
     }
-    #product-detail-modal .product-detail-img {
+    #product-detail-modal .product-detail-img, #search-results-modal .product-detail-img {
       width: 100%;
       height: 250px;
       object-fit: contain;
@@ -1010,30 +1011,30 @@
       background: var(--background);
       margin-bottom: 15px;
     }
-    #product-detail-modal .product-detail-title {
+    #product-detail-modal .product-detail-title, #search-results-modal .product-detail-title {
       font-size: 1.7rem;
       font-weight: bold;
       color: var(--primary-dark);
       margin-bottom: 8px;
     }
-    #product-detail-modal .product-detail-price {
+    #product-detail-modal .product-detail-price, #search-results-modal .product-detail-price {
       font-size: 1.3rem;
       font-weight: bold;
       color: var(--primary);
       margin-bottom: 12px;
     }
-    #product-detail-modal .product-detail-desc {
+    #product-detail-modal .product-detail-desc, #search-results-modal .product-detail-desc {
       font-size: 1rem;
       color: var(--text);
       margin-bottom: 15px;
       line-height: 1.5;
     }
-    #product-detail-modal .product-detail-meta {
+    #product-detail-modal .product-detail-meta, #search-results-modal .product-detail-meta {
       font-size: 0.95rem;
       color: var(--muted);
       margin-bottom: 20px;
     }
-    #product-detail-modal .buy-now-btn {
+    #product-detail-modal .buy-now-btn, #search-results-modal .buy-now-btn {
       width: 100%;
       background: var(--primary);
       color: var(--white);
@@ -1045,7 +1046,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    #product-detail-modal .buy-now-btn:active {
+    #product-detail-modal .buy-now-btn:active, #search-results-modal .buy-now-btn:active {
       background: var(--primary-dark);
     }
 
@@ -1414,6 +1415,79 @@
         color: var(--primary);
     }
 
+    /* Search Modal Specific Styles */
+    #search-modal .search-results-content {
+        max-height: 400px; /* Limit height for scrollable content */
+        overflow-y: auto;
+        padding-top: 15px;
+        border-top: 1px solid var(--muted);
+        margin-top: 15px;
+    }
+    #search-modal .search-results-item {
+        background: var(--background);
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid var(--muted);
+    }
+    #search-modal .search-results-item strong {
+        color: var(--primary-dark);
+    }
+    #search-modal .search-results-item p {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+    #search-modal .no-results {
+        text-align: center;
+        color: var(--muted);
+        padding: 20px;
+    }
+
+    /* Leaderboard styles */
+    .leaderboard-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .leaderboard-item {
+        background: var(--white);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .leaderboard-item .rank {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--primary-dark);
+        min-width: 30px;
+        text-align: center;
+    }
+    .leaderboard-item .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--background);
+    }
+    .leaderboard-item .info {
+        flex-grow: 1;
+    }
+    .leaderboard-item .handle {
+        font-weight: bold;
+        color: var(--text);
+        font-size: 1.1rem;
+    }
+    .leaderboard-item .points {
+        font-size: 1rem;
+        color: var(--primary);
+    }
+    .leaderboard-item .points-value {
+        font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -1498,26 +1572,26 @@
   </div>
 
   <!-- Top Bars for Sections -->
-<!--   <div class="section-top-bar" id="top-bar-post">
-    <div class="title">My Listings</div>
-  </div> -->
+  <div class="section-top-bar" id="top-bar-post">
+    <div class="title"></div>
+  </div>
   <div class="section-top-bar" id="top-bar-browse-products">
-    <div class="title"></div> <!-- Removed "Browse Products" -->
+    <div class="title"></div> 
   </div>
   <div class="section-top-bar" id="top-bar-profile">
-    <div class="title"></div> <!-- Removed "Profile" -->
+    <div class="title"></div>
   </div>
   <div class="section-top-bar" id="top-bar-leaderboard">
-    <div class="title"></div> <!-- Removed "Leaderboard" -->
+    <div class="title"></div>
   </div>
   <div class="section-top-bar" id="top-bar-referral">
-    <div class="title"></div> <!-- Removed "Referrals" -->
+    <div class="title"></div>
   </div>
   <div class="section-top-bar" id="top-bar-notifications">
-    <div class="title">Notifications</div>
+    <div class="title"></div>
   </div>
   <div class="section-top-bar" id="top-bar-menu">
-    <div class="title"></div> <!-- Removed "Menu" -->
+    <div class="title"></div>
   </div>
 
 
@@ -1580,8 +1654,10 @@
     </div>
   </div>
   <div class="dashboard-section" id="section-leaderboard">
-    <h2 style="display:none; margin:0; padding:0;"></h2> <!-- Removed "Leaderboard" heading and ensures no space -->
-    <div style="color:var(--muted); padding-top: 10px;">Leaderboard coming soon!</div>
+    <h2 style="text-align:center; color:var(--primary-dark); margin-bottom:20px;">Top Know Points Holders</h2>
+    <div class="leaderboard-list" id="leaderboard-list">
+      <!-- Leaderboard items will be rendered here -->
+    </div>
   </div>
   <div class="dashboard-section" id="section-referral">
     <div class="referral-bg">
@@ -1601,14 +1677,12 @@
     </div>
   </div>
   <div class="dashboard-section" id="section-notifications">
-<!--     <h2>Notifications</h2> -->
     <div class="notification-list" id="notification-list">
       <!-- Notifications will be rendered here -->
       <div style="text-align: center; color: var(--muted); padding: 20px;">No new notifications.</div>
     </div>
   </div>
   <div class="dashboard-section" id="section-menu">
-    <h2 style="display:none; margin:0; padding:0;"></h2> <!-- Removed "Menu" heading and ensures no space -->
     <div class="menu-list" style="display: flex; flex-direction: column; gap: 18px; margin-top: 18px;">
       <button class="menu-item" id="notification-btn" data-action="notifications">
         <span class="material-icons" style="vertical-align:middle;">notifications</span>
@@ -1619,9 +1693,9 @@
         <span class="material-icons" style="vertical-align:middle;">storefront</span>
         <span style="margin-left:10px;">View Products (Buyer View)</span>
       </button>
-      <button class="menu-item" id="theme-toggle" data-action="switch-theme">
-        <span class="material-icons" style="vertical-align:middle;">brightness_6</span>
-        <span style="margin-left:10px;">Switch Theme</span>
+      <button class="menu-item" id="search-id-button" data-action="search-id">
+        <span class="material-icons" style="vertical-align:middle;">search</span>
+        <span style="margin-left:10px;">Search by ID</span>
       </button>
       <button class="menu-item" id="support-btn" data-action="support">
         <span class="material-icons" style="vertical-align:middle;">support_agent</span>
@@ -1648,22 +1722,7 @@
         <input id="product-name" required maxlength="40" placeholder="e.g. Handmade Wallet">
         <label for="product-desc">Description</label>
         <textarea id="product-desc" rows="3" placeholder="Describe what you offer..." required></textarea>
-        <div class="ai-button-container">
-            <button type="button" class="ai-button" id="enhance-desc-btn">
-                ✨ Enhance Description
-                <span class="ai-loading-spinner" id="desc-loading-spinner"></span>
-            </button>
-        </div>
-        <div class="ai-button-container">
-            <button type="button" class="ai-button" id="generate-headlines-btn">
-                ✨ Generate Catchy Headlines
-                <span class="ai-loading-spinner" id="headlines-loading-spinner"></span>
-            </button>
-        </div>
-        <div id="generated-headlines-container" class="generated-headlines-container">
-            <h4>Suggested Headlines (Click to use):</h4>
-            <ul id="generated-headlines-list"></ul>
-        </div>
+        
         <label for="product-price">Price ($KNOW)</label>
         <input id="product-price" type="number" min="1" required placeholder="e.g. 50">
         <label for="product-category">Category</label>
@@ -1802,6 +1861,20 @@
     </div>
   </div>
 
+  <!-- Search Modal -->
+  <div class="modal-bg" id="search-modal">
+    <div class="modal-form">
+      <button class="close-btn" id="close-search-modal" title="Close">&times;</button>
+      <h2>🔎 Search by ID</h2>
+      <p style="text-align:center; color:var(--text); font-size:0.95rem; margin-bottom:15px;">Enter a Product ID or a Transaction ID (e.g., PROD-ABCDEF, PAY-12345)</p>
+      <input class="input" type="text" id="search-input" placeholder="Enter ID here..." required>
+      <button class="register-btn" id="perform-search-btn">Search</button>
+      <div id="search-results-content" class="search-results-content">
+        <!-- Search results will be displayed here -->
+      </div>
+    </div>
+  </div>
+
 
   <div class="bottom-nav" id="bottom-nav" style="display:none;">
   </div>
@@ -1928,7 +2001,7 @@
 
     // Product Posting Modal
     const openPostFormBtn = document.getElementById('open-post-form');
-    const postFormModal = document.getElementById('post-form-modal');
+    const postFormModal = document = document.getElementById('post-form-modal');
     const closePostFormBtn = document.getElementById('close-post-form');
     const productForm = document.getElementById('product-form');
     const imageInput = document.getElementById('product-image');
@@ -1937,15 +2010,8 @@
     const digitalTypeGroup = document.getElementById('digital-type-group');
     const digitalFileSelect = document.getElementById('digital-file');
     const digitalFileNameDisplay = document.getElementById('digital-file-name');
-    const productNameInput = document.getElementById('product-name'); // Added for LLM
-    const productDescTextarea = document.getElementById('product-desc'); // Added for LLM
-    const enhanceDescBtn = document.getElementById('enhance-desc-btn'); // Added for LLM
-    const descLoadingSpinner = document.getElementById('desc-loading-spinner'); // Added for LLM
-    const generateHeadlinesBtn = document.getElementById('generate-headlines-btn'); // Added for LLM
-    const headlinesLoadingSpinner = document.getElementById('headlines-loading-spinner'); // Added for LLM
-    const generatedHeadlinesContainer = document.getElementById('generated-headlines-container'); // Added for LLM
-    const generatedHeadlinesList = document.getElementById('generated-headlines-list'); // Added for LLM
-
+    const productNameInput = document.getElementById('product-name'); 
+    const productDescTextarea = document.getElementById('product-desc'); 
 
     // Product Detail Modal (for Buyer View)
     const productDetailModal = document.getElementById('product-detail-modal');
@@ -1998,7 +2064,7 @@
 
     // Goods Buy Now Modal
     const goodsBuyModal = document.getElementById('goods-buy-modal');
-    const closeGoodsBuyBtn = document = document.getElementById('close-goods-buy');
+    const closeGoodsBuyBtn = document.getElementById('close-goods-buy');
     const goodsBuyImg = document.getElementById('goods-buy-img');
     const goodsBuyName = document.getElementById('goods-buy-name');
     const goodsBuyDetails = document.getElementById('goods-buy-details');
@@ -2013,6 +2079,13 @@
     let currentGoodsBuyProduct = null;
     let currentGoodsBuyQuantity = 1;
 
+    // Search Modal
+    const searchModal = document.getElementById('search-modal');
+    const closeSearchModalBtn = document.getElementById('close-search-modal');
+    const searchInput = document.getElementById('search-input');
+    const performSearchBtn = document.getElementById('perform-search-btn');
+    const searchResultsContent = document.getElementById('search-results-content');
+
 
     // --- General Modal Open/Close Event Listeners ---
     openBtn.onclick = () => { registrationModal.classList.add('active'); };
@@ -2021,9 +2094,6 @@
     closeBuyerBtn.onclick = () => { buyerModal.classList.remove('active'); };
     openPostFormBtn.onclick = () => { 
         postFormModal.classList.add('active');
-        // Clear previously generated headlines when opening the form
-        generatedHeadlinesContainer.style.display = 'none';
-        generatedHeadlinesList.innerHTML = '';
     };
     closePostFormBtn.onclick = () => {
       postFormModal.classList.remove('active');
@@ -2033,14 +2103,14 @@
       digitalTypeGroup.style.display = 'none'; // Hide digital specific fields on close
       digitalFileSelect.value = '';
       digitalFileNameDisplay.textContent = '';
-      generatedHeadlinesContainer.style.display = 'none'; // Ensure hidden on close
-      generatedHeadlinesList.innerHTML = ''; // Clear list on close
     };
     closeProductDetailBtn.onclick = () => { productDetailModal.classList.remove('active'); };
     closeGoodsChatBtn.onclick = () => { goodsChatModal.classList.remove('active'); };
     closeDigitalBuyBtn.onclick = () => { digitalBuyModal.classList.remove('active'); };
     closeServiceAgreeBtn.onclick = () => { serviceAgreeModal.classList.remove('active'); };
     closeGoodsBuyBtn.onclick = () => { goodsBuyModal.classList.remove('active'); };
+    closeSearchModalBtn.onclick = () => { searchModal.classList.remove('active'); };
+
 
     // Close modals if clicking outside of them
     window.onclick = (e) => {
@@ -2052,6 +2122,7 @@
       if (e.target === digitalBuyModal) digitalBuyModal.classList.remove('active');
       if (e.target === serviceAgreeModal) serviceAgreeModal.classList.remove('active');
       if (e.target === goodsBuyModal) goodsBuyModal.classList.remove('active');
+      if (e.target === searchModal) searchModal.classList.remove('active');
     };
 
     // --- Landing Page and Initial User Registration ---
@@ -2118,9 +2189,16 @@
       dashboardSections.forEach(sec => sec.classList.remove('active'));
       topBars.forEach(bar => bar.style.display = 'none'); // Hide all top bars
 
+      // Ensure the element exists before trying to access its style
+      const targetTopBar = document.getElementById('top-bar-' + sectionId);
+      if (targetTopBar) {
+          targetTopBar.style.display = 'flex'; // Show relevant top bar
+          console.log(`Section '${sectionId}' is now active. Top bar '${'top-bar-' + sectionId}' is display: flex.`);
+      } else {
+          console.error(`Error: Top bar element 'top-bar-${sectionId}' not found.`);
+      }
+      
       document.getElementById('section-' + sectionId).classList.add('active');
-      document.getElementById('top-bar-' + sectionId).style.display = 'flex'; // Show relevant top bar
-      console.log(`Section '${sectionId}' is now active. Top bar '${'top-bar-' + sectionId}' is display: flex.`);
 
 
       // Update active state of bottom nav buttons
@@ -2149,6 +2227,8 @@
           renderSellerProducts();
       } else if (sectionId === 'notifications') {
           renderNotifications();
+      } else if (sectionId === 'leaderboard') {
+          renderLeaderboard(); // Call renderLeaderboard when leaderboard section is shown
       }
     }
 
@@ -2162,8 +2242,6 @@
         { id: 'nav-profile', icon: 'person', label: 'Profile', section: 'profile' },
         { id: 'nav-leaderboard', icon: 'emoji_events', label: 'Leaderboard', section: 'leaderboard' },
         { id: 'nav-referral', icon: 'share', label: 'Referral', section: 'referral' },
-        // The 'Notifications' button is now in the menu, not main nav.
-        // { id: 'nav-notifications', icon: 'notifications', label: 'Notifications', section: 'notifications' }, 
         { id: 'nav-menu', icon: 'menu', label: 'Menu', section: 'menu' },
       ];
 
@@ -2187,7 +2265,7 @@
       updateKnowPointsDisplay();
       loadUserNotifications(); // Ensure notifications are loaded when dashboard shows
       updateNotificationBadge(); // Update badge after loading
-      removeHeadingsAndLabels(); // Call the new function here
+      removeTopBarHeadings(); // Call the updated function here
     }
 
     function createNavButton(id, icon, label, section) {
@@ -2242,8 +2320,8 @@
     let sellerProducts = []; // Products specifically posted by the current seller
     productForm.onsubmit = function(e) {
       e.preventDefault();
-      const name = productNameInput.value.trim(); // Using the named variable
-      const desc = productDescTextarea.value.trim(); // Using the named variable
+      const name = productNameInput.value.trim(); 
+      const desc = productDescTextarea.value.trim(); 
       const price = parseFloat(document.getElementById('product-price').value);
       const category = document.getElementById('product-category').value;
       const location = document.getElementById('product-location').value.trim();
@@ -2257,7 +2335,6 @@
           const digitalType = document.getElementById('digital-type').value;
           const digitalFile = digitalFileNameDisplay.textContent.split(' ')[1] || ''; // Just filename for demo
           if (!digitalType || !digitalFile) {
-              // Using a showToast for missing fields
               showToast('Please select digital product type and upload a file.', 'error');
               return;
           }
@@ -2269,8 +2346,6 @@
         allProducts.unshift(newProduct); // Add to global list of all products
 
         renderSellerProducts(); // Update seller's view
-        // The buyer view is rendered when the section is shown, so no need to explicitly call here unless already active.
-        // renderAllProducts(currentBuyerCategory); 
 
         productForm.reset();
         imagePreview.style.display = 'none';
@@ -2279,139 +2354,8 @@
         digitalFileSelect.value = '';
         digitalFileNameDisplay.textContent = '';
         postFormModal.classList.remove('active');
-        showToast('Product posted successfully!', 'info'); // Changed to 'info'
+        showToast('Product posted successfully!', 'info'); 
       }
-    };
-
-    // --- LLM Feature: Enhance Description ---
-    enhanceDescBtn.onclick = async () => {
-        const productName = productNameInput.value.trim();
-        const currentDesc = productDescTextarea.value.trim();
-
-        if (!productName) {
-            showToast('Please enter a Product Name first.', 'error');
-            return;
-        }
-
-        descLoadingSpinner.style.display = 'inline-block'; // Show spinner
-        enhanceDescBtn.disabled = true; // Disable button during generation
-        productDescTextarea.disabled = true; // Disable textarea during generation
-
-        try {
-            const prompt = `Generate a compelling and slightly longer product description (2-4 sentences) for an item named "${productName}". The current description is: "${currentDesc}". Focus on benefits and appeal to a marketplace buyer.`;
-            
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Leave empty; Canvas will inject
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error.message || 'Unknown error'}`);
-            }
-
-            const result = await response.json();
-            
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                const generatedText = result.candidates[0].content.parts[0].text;
-                productDescTextarea.value = generatedText;
-                showToast('Description enhanced successfully!', 'info');
-            } else {
-                showToast('Failed to generate description. Please try again.', 'error');
-            }
-        } catch (error) {
-            console.error('Error generating description:', error);
-            showToast(`Error generating description: ${error.message}`, 'error');
-        } finally {
-            descLoadingSpinner.style.display = 'none'; // Hide spinner
-            enhanceDescBtn.disabled = false; // Re-enable button
-            productDescTextarea.disabled = false; // Re-enable textarea
-        }
-    };
-
-    // --- LLM Feature: Generate Catchy Headlines ---
-    generateHeadlinesBtn.onclick = async () => {
-        const productName = productNameInput.value.trim();
-        const productDesc = productDescTextarea.value.trim();
-
-        if (!productName) {
-            showToast('Please enter a Product Name first.', 'error');
-            return;
-        }
-
-        headlinesLoadingSpinner.style.display = 'inline-block'; // Show spinner
-        generateHeadlinesBtn.disabled = true; // Disable button during generation
-
-        try {
-            const prompt = `Generate 3 to 5 short, catchy, and compelling headlines for a product named "${productName}". The product description is: "${productDesc}". Return them as a numbered list.`;
-            
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Leave empty; Canvas will inject
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error.message || 'Unknown error'}`);
-            }
-
-            const result = await response.json();
-            
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                const generatedText = result.candidates[0].content.parts[0].text;
-                
-                // Parse the numbered list from the generated text
-                const headlines = generatedText.split('\n').filter(line => line.match(/^\d+\./)).map(line => line.replace(/^\d+\.\s*/, '').trim());
-
-                generatedHeadlinesList.innerHTML = ''; // Clear previous headlines
-                if (headlines.length > 0) {
-                    headlines.forEach(headline => {
-                        const li = document.createElement('li');
-                        li.textContent = headline;
-                        li.title = "Click to use this headline";
-                        li.style.cursor = 'pointer';
-                        li.onclick = () => {
-                            productNameInput.value = headline; // Set headline as product name
-                            generatedHeadlinesContainer.style.display = 'none'; // Hide suggestions
-                            showToast('Headline applied!', 'info');
-                        };
-                        generatedHeadlinesList.appendChild(li);
-                    });
-                    generatedHeadlinesContainer.style.display = 'block'; // Show the container
-                    showToast('Catchy headlines generated!', 'info');
-                } else {
-                    showToast('No catchy headlines generated. Try adjusting your input.', 'error');
-                    generatedHeadlinesContainer.style.display = 'none';
-                }
-            } else {
-                showToast('Failed to generate headlines. Please try again.', 'error');
-                generatedHeadlinesContainer.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error generating headlines:', error);
-            showToast(`Error generating headlines: ${error.message}`, 'error');
-        } finally {
-            headlinesLoadingSpinner.style.display = 'none'; // Hide spinner
-            generateHeadlinesBtn.disabled = false; // Re-enable button
-        }
     };
 
 
@@ -2470,7 +2414,7 @@
 
             renderSellerProducts(); // Re-render seller's view
             renderAllProducts(currentBuyerCategory); // Re-render buyer's view
-            showToast('Product deleted successfully!', 'info'); // Changed to 'info'
+            showToast('Product deleted successfully!', 'info'); 
           };
           list.appendChild(card);
       });
@@ -2604,7 +2548,7 @@
         };
         sendNotification(currentGoodsProduct.sellerEmail, notification);
         goodsChatModal.classList.remove('active');
-        showToast(`Your inquiry for ${currentGoodsQuantity} x ${currentGoodsProduct.name} sent to seller ${currentGoodsProduct.sellerHandle}. Check notifications for response.`, 'info'); // Changed to 'info'
+        showToast(`Your inquiry for ${currentGoodsQuantity} x ${currentGoodsProduct.name} sent to seller ${currentGoodsProduct.sellerHandle}. Check notifications for response.`, 'info'); 
     };
 
     // Digital Chat/Buy Modal (Buyer Initiates)
@@ -2669,7 +2613,7 @@
         sendNotification(currentUserEmail, buyerNotification); // Send to current user (the buyer)
 
 
-        showToast('Payment successful! You can now download your digital product.', 'info'); // Changed to 'info'
+        showToast('Payment successful! You can now download your digital product.', 'info'); 
     };
 
     digitalDownloadBtn.onclick = () => {
@@ -2722,7 +2666,7 @@
         };
         sendNotification(currentServiceProduct.sellerEmail, notification);
         serviceAgreeModal.classList.remove('active');
-        showToast(`Your service request for ${currentServiceProduct.name} sent to seller ${currentServiceProduct.sellerHandle}.`, 'info'); // Changed to 'info'
+        showToast(`Your service request for ${currentServiceProduct.name} sent to seller ${currentServiceProduct.sellerHandle}.`, 'info'); 
     };
 
     // Goods Buy Now Modal (Buyer Confirms Payment)
@@ -2801,7 +2745,7 @@
         sendNotification(currentUserEmail, buyerNotification); // Send to current user (the buyer)
 
 
-        showToast('Payment successful!', 'info'); // Changed to 'info'
+        showToast('Payment successful!', 'info'); 
     };
 
     printReceiptBtn.onclick = () => {
@@ -2880,15 +2824,13 @@
 
         // If the notification is for the currently logged-in user, update the in-memory array and badge
         if (targetEmail === currentUserEmail) {
-            // No need to reload from localStorage here, as we just updated it.
-            // Just update the in-memory array directly, then update the badge/render if active.
-            userNotifications = targetUserNotifications; // Assign the updated array directly
+            userNotifications = targetUserNotifications; 
             
             // Only re-render notifications if the notifications section is currently active
             if (document.getElementById('section-notifications').classList.contains('active')) {
                 renderNotifications();
             }
-            updateNotificationBadge(); // Always update badge
+            updateNotificationBadge(); 
         }
     }
 
@@ -2920,15 +2862,13 @@
                     <button class="btn-error" data-index="${index}" data-action="decline-goods-inquiry">Decline</button>
                 `;
             } else if (notification.type === 'Digital Product Purchased') {
-                // This notification type is for both seller and buyer now
-                if (notification.buyerEmail === currentUserEmail) { // This is the buyer's own purchase notification
+                if (notification.buyerEmail === currentUserEmail) { 
                     notificationTitle = `Your Purchase: ${notification.productName}`;
                     contentHTML = `You purchased ${notification.productName} for $${notification.price} KNOW. Payment ID: ${notification.paymentId}. Seller: ${notification.sellerHandle}.`;
-                } else { // This is the seller's notification about a sale
+                } else { 
                     notificationTitle = `Digital Product Sold: ${notification.productName}`;
                     contentHTML = `Buyer: ${notification.buyerEmail} purchased ${notification.productName}. Payment ID: ${notification.paymentId}.`;
                 }
-                // No actions for seller here, as download is automatic for buyer
             } else if (notification.type === 'Service Request') {
                 notificationTitle = `New Service Request for ${notification.productName}`;
                 contentHTML = `Buyer: ${notification.buyerEmail} requested service on ${notification.serviceDate} from ${notification.startTime} to ${notification.endTime} at ${notification.workLocation}. Product ID: ${notification.productId}.`;
@@ -2937,11 +2877,10 @@
                     <button class="btn-error" data-index="${index}" data-action="decline-service">Decline</button>
                 `;
             } else if (notification.type === 'Goods Purchased') {
-                // This notification type is also for both seller and buyer now
-                if (notification.buyerEmail === currentUserEmail) { // This is the buyer's own purchase notification
+                if (notification.buyerEmail === currentUserEmail) { 
                     notificationTitle = `Your Purchase: ${notification.productName}`;
                     contentHTML = `You purchased ${notification.quantity || ''} x ${notification.productName} for $${(notification.price * (notification.quantity || 1)).toFixed(2)} KNOW. Payment ID: ${notification.paymentId}. Seller: ${notification.sellerHandle}.`;
-                } else { // This is the seller's notification about a sale
+                } else { 
                     notificationTitle = `Goods Sold: ${notification.productName}`;
                     contentHTML = `Buyer: ${notification.buyerEmail} purchased ${notification.quantity} x ${notification.productName}. Payment ID: ${notification.paymentId}.`;
                 }
@@ -2972,12 +2911,10 @@
             item.addEventListener('click', () => {
                 if (!notification.isRead) {
                     notification.isRead = true;
-                    // Update the in-memory array
                     userNotifications[index].isRead = true;
-                    // Persist the change to localStorage for the current user
                     localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications));
                     item.classList.remove('unread');
-                    updateNotificationBadge(); // Update badge when notification is read
+                    updateNotificationBadge(); 
                     console.log('Notification marked as read:', notification.id);
                 }
             });
@@ -2988,7 +2925,6 @@
                 if (proceedButton) {
                     proceedButton.onclick = (e) => {
                         e.stopPropagation();
-                        // Seller confirms availability, notifies buyer
                         const originalNotif = userNotifications[index];
                         const buyerNotification = {
                             id: Date.now(),
@@ -3002,11 +2938,11 @@
                         };
                         sendNotification(originalNotif.buyerEmail, buyerNotification);
                         originalNotif.status = 'accepted';
-                        originalNotif.isRead = true; // Mark seller's inquiry notification as read
-                        localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications)); // Update seller's notifications
+                        originalNotif.isRead = true; 
+                        localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications)); 
                         renderNotifications();
-                        updateNotificationBadge(); // Update badge
-                        showToast(`Notified buyer ${originalNotif.buyerEmail} that goods are available.`, 'info'); // Changed to 'info'
+                        updateNotificationBadge(); 
+                        showToast(`Notified buyer ${originalNotif.buyerEmail} that goods are available.`, 'info'); 
                     };
                 }
 
@@ -3014,11 +2950,10 @@
                 if (declineButton) {
                     declineButton.onclick = (e) => {
                         e.stopPropagation();
-                        // Seller declines, notifies buyer (optional: add buyer notification type for this)
-                        userNotifications.splice(index, 1); // Remove notification from current user's array
-                        localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications)); // Persist change
+                        userNotifications.splice(index, 1); 
+                        localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications)); 
                         renderNotifications();
-                        updateNotificationBadge(); // Update badge
+                        updateNotificationBadge(); 
                         showToast('Inquiry declined.', 'info');
                     };
                 }
@@ -3044,8 +2979,8 @@
                         originalNotif.isRead = true;
                         localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications));
                         renderNotifications();
-                        updateNotificationBadge(); // Update badge
-                        showToast(`Notified buyer ${originalNotif.buyerEmail} about service agreement.`, 'info'); // Changed to 'info'
+                        updateNotificationBadge(); 
+                        showToast(`Notified buyer ${originalNotif.buyerEmail} about service agreement.`, 'info'); 
                     };
                 }
 
@@ -3053,10 +2988,10 @@
                 if (declineServiceButton) {
                     declineServiceButton.onclick = (e) => {
                         e.stopPropagation();
-                        userNotifications.splice(index, 1); // Remove notification
+                        userNotifications.splice(index, 1); 
                         localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications));
                         renderNotifications();
-                        updateNotificationBadge(); // Update badge
+                        updateNotificationBadge(); 
                         showToast('Service request declined.', 'info');
                     };
                 }
@@ -3068,24 +3003,21 @@
                         const originalNotif = userNotifications[index];
                         const product = allProducts.find(p => p.id === originalNotif.productId);
                         if (product) {
-                            showGoodsBuyNowModal(product); // Open the buy modal
-                            // Pre-fill quantity if available in notification (though buy modal resets to 1)
-                            // If currentGoodsBuyQuantity is initialized from notification, it needs to be passed.
-                            // For simplicity, goodsBuyNowModal always starts at 1, user adjusts.
+                            showGoodsBuyNowModal(product); 
                         } else {
                             showToast('Product not found.', 'error');
                         }
-                        userNotifications[index].isRead = true; // Mark as read
+                        userNotifications[index].isRead = true; 
                         localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications));
-                        renderNotifications(); // Refresh notifications
-                        updateNotificationBadge(); // Update badge
+                        renderNotifications(); 
+                        updateNotificationBadge(); 
                     };
                 }
             }
             notificationList.appendChild(item);
             console.log('Appending notification item:', notification.id, notification.type);
         });
-        updateNotificationBadge(); // Ensure badge is correct after rendering notifications
+        updateNotificationBadge(); 
     }
 
     // Function to update the notification badge
@@ -3093,7 +3025,7 @@
         const notificationsBtn = document.getElementById('notification-btn');
         if (!notificationsBtn) {
             console.log("Notifications button not found, cannot update badge.");
-            return; // Exit if button doesn't exist (e.g., on landing page)
+            return; 
         }
 
         const unreadCount = userNotifications.filter(notif => !notif.isRead).length;
@@ -3105,7 +3037,7 @@
                 badge.className = 'notification-badge';
                 notificationsBtn.appendChild(badge);
             }
-            badge.textContent = unreadCount > 9 ? '9+' : unreadCount; // Display '9+' for more than 9 unread
+            badge.textContent = unreadCount > 9 ? '9+' : unreadCount; 
             badge.style.display = 'block';
             console.log(`Notification badge updated: ${unreadCount} unread for ${currentUserEmail}.`);
         } else {
@@ -3119,38 +3051,46 @@
     /**
      * Removes specified labels/headings from the UI and adjusts spacing.
      */
-    function removeHeadingsAndLabels() {
+    function removeTopBarHeadings() {
         // Remove text content from top bar titles
-        document.querySelector('#top-bar-browse-products .title').textContent = '';
-        document.querySelector('#top-bar-profile .title').textContent = '';
-        document.querySelector('#top-bar-leaderboard .title').textContent = '';
-        document.querySelector('#top-bar-referral .title').textContent = '';
-        document.querySelector('#top-bar-menu .title').textContent = '';
+        const topBarTitles = [
+            'top-bar-browse-products',
+            'top-bar-profile',
+            'top-bar-leaderboard',
+            'top-bar-referral',
+            'top-bar-notifications',
+            'top-bar-menu',
+            'top-bar-post' // Include 'My Listings' here
+        ];
+
+        topBarTitles.forEach(id => {
+            const titleElement = document.querySelector(`#${id} .title`);
+            if (titleElement) {
+                titleElement.textContent = ''; // Set to empty string to remove text
+            }
+        });
 
         // Hide h2 elements in sections and collapse their space
-        const leaderboardH2 = document.querySelector('#section-leaderboard h2');
-        if (leaderboardH2) {
-            leaderboardH2.style.display = 'none';
-            leaderboardH2.style.margin = '0';
-            leaderboardH2.style.padding = '0';
-        }
-        const menuH2 = document.querySelector('#section-menu h2');
-        if (menuH2) {
-            menuH2.style.display = 'none';
-            menuH2.style.margin = '0';
-            menuH2.style.padding = '0';
-        }
+        const sectionsToAdjust = ['leaderboard', 'menu'];
+        sectionsToAdjust.forEach(sectionId => {
+            const h2 = document.querySelector(`#section-${sectionId} h2`);
+            if (h2) {
+                h2.style.display = 'none';
+                h2.style.margin = '0';
+                h2.style.padding = '0';
+            }
+        });
 
-        // Restore referral section specific texts
+        // Restore referral section specific texts (these were already correct)
         const referralTitleDiv = document.querySelector('#section-referral .referral-title');
         if (referralTitleDiv) {
             referralTitleDiv.textContent = 'INVITE FRENS';
-            referralTitleDiv.style.display = 'block'; // Ensure it's visible if hidden by a previous rule
+            referralTitleDiv.style.display = 'block'; 
         }
         const referralDescDiv = document.querySelector('#section-referral .referral-desc');
         if (referralDescDiv) {
             referralDescDiv.textContent = 'Score 5% from your buddies’ earned tokens + 1.25% from their referrals.';
-            referralDescDiv.style.display = 'block'; // Ensure it's visible
+            referralDescDiv.style.display = 'block'; 
         }
 
         // Adjust padding/margin for sections to minimize whitespace
@@ -3177,22 +3117,10 @@
         if (action === 'notifications') {
             showSection('notifications');
         } else if (action === 'view-products') {
-            // This is primarily for sellers to view products as a buyer
             if (currentUserType === 'seller') {
                 showToast('Switching to buyer view...', 'info');
-                currentUserType = 'buyer'; // Temporarily switch to buyer view
-                // Re-assign currentUserEmail based on previous email if possible, or a default buyer email
-                // For this demo, let's assume we re-use the same email, but for a real app,
-                // you'd typically have distinct login flows or user accounts.
-                // If you want to demonstrate separate inboxes for "seller1@example.com" acting as a buyer
-                // vs. "buyer@example.com", you'd need to change `currentUserEmail` here.
-                // For now, let's keep it simple and assume `your@email.com` can be both buyer/seller.
-                
-                // If the user *was* a seller, when they click "View Products (Buyer View)",
-                // we want them to effectively become a buyer for *their own* email.
-                // So no change to currentUserEmail is needed here if it's already set to e.g. "your@email.com".
-                // The crucial part is re-rendering the dashboard based on the new `currentUserType`.
-                showDashboard(); // Re-render dashboard for buyer
+                currentUserType = 'buyer'; 
+                showDashboard(); 
                 const browseBtn = document.getElementById('nav-browse-products');
                 if (browseBtn) {
                   browseBtn.click();
@@ -3200,28 +3128,20 @@
             } else {
                 showToast('You are already viewing products!', 'info');
             }
-        } else if (action === 'switch-theme') {
-          document.body.classList.toggle('dark-theme');
-          // Optional: Save theme preference to localStorage for persistence
-          // if (document.body.classList.contains('dark-theme')) {
-          //   localStorage.setItem('theme', 'dark');
-          // } else {
-          //   localStorage.setItem('theme', 'light');
-          // }
+        } else if (action === 'search-id') {
+            openSearchModal();
         } else if (action === 'support') {
           window.open('mailto:support@knowempire.com?subject=Support%20Request', '_blank'); // Open in new tab
         } else if (action === 'logout') {
           showToast('Logging out...', 'info');
-          // No need to clear userNotifications here; it's handled by loadUserNotifications on login.
-          // The data remains in localStorage under its user-specific key.
           currentUserType = null;
-          currentUserEmail = ''; // Clear current user email
+          currentUserEmail = ''; 
           localStorage.removeItem('currentUserType');
           localStorage.removeItem('currentUserEmail');
-          localStorage.removeItem('userKnowPoints'); // Reset points on logout
-          localStorage.removeItem('lastLoginDate'); // Reset last login date
+          localStorage.removeItem('userKnowPoints'); 
+          localStorage.removeItem('lastLoginDate'); 
           console.log('Logout: Cleared user data from localStorage and session globals.');
-          window.location.reload(); // Simple reload for demo purposes to reset state
+          window.location.reload(); 
         }
       }
     });
@@ -3240,7 +3160,7 @@
 
         document.getElementById('profile-wallet').style.display = 'flex';
         this.style.display = 'none';
-        showToast('Farcaster Wallet Connected!', 'info'); // Changed to 'info'
+        showToast('Farcaster Wallet Connected!', 'info'); 
       }, 1000);
     };
 
@@ -3253,8 +3173,183 @@
       showToast('Farcaster Wallet Disconnected!', 'info');
     };
 
+    // --- Search by ID Logic ---
+    function openSearchModal() {
+        searchModal.classList.add('active');
+        searchInput.value = '';
+        searchResultsContent.innerHTML = ''; // Clear previous results
+    }
+
+    performSearchBtn.onclick = () => {
+        const queryId = searchInput.value.trim();
+        searchResultsContent.innerHTML = ''; // Clear previous results
+
+        if (!queryId) {
+            searchResultsContent.innerHTML = '<div class="no-results">Please enter an ID to search.</div>';
+            return;
+        }
+
+        let found = false;
+
+        // 1. Search for Product
+        const product = allProducts.find(p => p.id.toUpperCase() === queryId.toUpperCase());
+        if (product) {
+            found = true;
+            searchResultsContent.innerHTML += `
+                <div class="search-results-item">
+                    <strong>Product Found:</strong>
+                    <p><strong>ID:</strong> ${product.id}</p>
+                    <p><strong>Name:</strong> ${product.name}</p>
+                    <p><strong>Description:</strong> ${product.desc}</p>
+                    <p><strong>Price:</strong> $${product.price} KNOW</p>
+                    <p><strong>Category:</strong> ${capitalize(product.category)}</p>
+                    <p><strong>Location:</strong> ${product.location}</p>
+                    <p><strong>Seller:</strong> ${product.sellerHandle}</p>
+                    ${product.image ? `<img src="${product.image}" alt="Product Image" style="max-width:100%; height:auto; border-radius:8px; margin-top:10px;">` : ''}
+                </div>
+            `;
+        }
+
+        // 2. Search for Transactions (Notifications)
+        // Combine notifications from all users to search through
+        let allAppNotifications = [];
+        // Iterate through all localStorage items
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            // Check if the key starts with 'notifications_'
+            if (key.startsWith('notifications_')) {
+                try {
+                    const notifs = JSON.parse(localStorage.getItem(key));
+                    // Ensure notifs is an array before concatenating
+                    if (Array.isArray(notifs)) {
+                        allAppNotifications = allAppNotifications.concat(notifs);
+                    }
+                } catch (e) {
+                    console.error("Error parsing stored notifications:", e);
+                }
+            }
+        }
+        
+        const matchingNotifications = allAppNotifications.filter(notif => 
+            (notif.paymentId && notif.paymentId.toUpperCase() === queryId.toUpperCase()) ||
+            (notif.productId && notif.productId.toUpperCase() === queryId.toUpperCase())
+        );
+
+        if (matchingNotifications.length > 0) {
+            found = true;
+            matchingNotifications.forEach(notif => {
+                let transactionDetails = '';
+                // Customize display based on notification type
+                if (notif.type === 'Goods Purchased' || notif.type === 'Digital Product Purchased') {
+                    transactionDetails = `
+                        <p><strong>ID:</strong> ${notif.paymentId || notif.productId}</p>
+                        <p><strong>Type:</strong> ${notif.type}</p>
+                        <p><strong>Product:</strong> ${notif.productName}</p>
+                        ${notif.quantity ? `<p><strong>Quantity:</strong> ${notif.quantity}</p>` : ''}
+                        ${notif.price ? `<p><strong>Price:</strong> $${(notif.price * (notif.quantity || 1)).toFixed(2)} KNOW</p>` : ''}
+                        <p><strong>Buyer:</strong> ${notif.buyerEmail}</p>
+                        <p><strong>Seller:</strong> ${notif.sellerHandle || notif.sellerEmail}</p>
+                        <p><strong>Timestamp:</strong> ${getFormattedDate(notif.timestamp)}</p>
+                    `;
+                } else if (notif.type === 'Goods Order Inquiry') {
+                     transactionDetails = `
+                        <p><strong>ID:</strong> ${notif.productId}</p>
+                        <p><strong>Type:</strong> ${notif.type}</p>
+                        <p><strong>Product:</strong> ${notif.productName}</p>
+                        <p><strong>Quantity:</strong> ${notif.quantity}</p>
+                        <p><strong>Buyer:</strong> ${notif.buyerEmail}</p>
+                        <p><strong>Status:</strong> ${capitalize(notif.status)}</p>
+                        <p><strong>Timestamp:</strong> ${getFormattedDate(notif.timestamp)}</p>
+                    `;
+                } else if (notif.type === 'Service Request') {
+                     transactionDetails = `
+                        <p><strong>ID:</strong> ${notif.productId}</p>
+                        <p><strong>Type:</strong> ${notif.type}</p>
+                        <p><strong>Service:</strong> ${notif.productName}</p>
+                        <p><strong>Buyer:</strong> ${notif.buyerEmail}</p>
+                        <p><strong>Date:</strong> ${notif.serviceDate}</p>
+                        <p><strong>Time:</strong> ${notif.startTime} - ${notif.endTime}</p>
+                        <p><strong>Location:</strong> ${notif.workLocation}</p>
+                        <p><strong>Status:</strong> ${capitalize(notif.status)}</p>
+                        <p><strong>Timestamp:</strong> ${getFormattedDate(notif.timestamp)}</p>
+                    `;
+                } else {
+                    // Fallback for other notification types
+                    transactionDetails = `<p><strong>Notification Type:</strong> ${notif.type}</p><p><strong>ID:</strong> ${notif.id}</p><p><strong>Content:</strong> ${notif.content || 'N/A'}</p><p><strong>Timestamp:</strong> ${getFormattedDate(notif.timestamp)}</p>`;
+                }
+
+                searchResultsContent.innerHTML += `
+                    <div class="search-results-item">
+                        <strong>Transaction/Notification:</strong>
+                        ${transactionDetails}
+                    </div>
+                `;
+            });
+        }
+
+        if (!found) {
+            searchResultsContent.innerHTML = '<div class="no-results">No product or transaction found with that ID.</div>';
+        }
+    };
+
+    // --- Leaderboard Functionality ---
+    const leaderboardList = document.getElementById('leaderboard-list');
+
+    function generateDummyLeaderboardData() {
+        const dummyUsers = [
+            { handle: '@AliceCrypto', knowPoints: 12500 },
+            { handle: '@BobNFTs', knowPoints: 10200 },
+            { handle: '@CharlieDeFi', knowPoints: 9800 },
+            { handle: '@DanaWeb3', knowPoints: 8500 },
+            { handle: '@EveExplorer', knowPoints: 7300 },
+            { handle: '@FrankieMiner', knowPoints: 6100 },
+            { handle: '@GraceHodler', knowPoints: 5000 },
+            { handle: '@HarryYield', knowPoints: 4200 },
+            { handle: '@IvyLiquidity', knowPoints: 3100 },
+            { handle: '@JackGasFee', knowPoints: 2000 },
+        ];
+        // Merge with current user's points if they are significant
+        if (currentUserEmail && userKnowPoints > 0) {
+            const currentUserHandle = `@${currentUserEmail.split('@')[0]}`;
+            const existingUserIndex = dummyUsers.findIndex(u => u.handle === currentUserHandle);
+            if (existingUserIndex !== -1) {
+                dummyUsers[existingUserIndex].knowPoints = Math.max(dummyUsers[existingUserIndex].knowPoints, userKnowPoints);
+            } else {
+                dummyUsers.push({ handle: currentUserHandle, knowPoints: userKnowPoints });
+            }
+        }
+
+        // Sort by knowPoints descending
+        dummyUsers.sort((a, b) => b.knowPoints - a.knowPoints);
+
+        return dummyUsers;
+    }
+
+    function renderLeaderboard() {
+        leaderboardList.innerHTML = ''; // Clear existing list
+        const leaderboardData = generateDummyLeaderboardData();
+
+        if (leaderboardData.length === 0) {
+            leaderboardList.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 20px;">No leaderboard data available.</div>';
+            return;
+        }
+
+        leaderboardData.forEach((user, index) => {
+            const item = document.createElement('div');
+            item.className = 'leaderboard-item';
+            item.innerHTML = `
+                <div class="rank">${index + 1}.</div>
+                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.handle}" alt="Avatar" class="avatar">
+                <div class="info">
+                    <div class="handle">${user.handle}</div>
+                    <div class="points"><span class="points-value">${user.knowPoints.toLocaleString()}</span> Know Points</div>
+                </div>
+            `;
+            leaderboardList.appendChild(item);
+        });
+    }
+
     // --- Initialization on Load ---
-    // Ensure landing content is always visible initially, then check localStorage
     console.log("Initial load check: Showing landing content by default.");
     landingContent.style.display = 'block';
     bottomNav.style.display = 'none';
@@ -3265,7 +3360,6 @@
     const storedUserType = localStorage.getItem('currentUserType');
     const storedUserEmail = localStorage.getItem('currentUserEmail');
 
-    // Correctly handle "null" string from localStorage
     let loggedInUserType = (storedUserType === "null" || storedUserType === null) ? null : storedUserType;
     let loggedInUserEmail = (storedUserEmail === "null" || storedUserEmail === null) ? '' : storedUserEmail;
     console.log('Initial load. storedUserEmail:', storedUserEmail, 'storedUserType:', storedUserType);
@@ -3276,20 +3370,16 @@
         console.log(`Stored user found: Type = ${loggedInUserType}, Email = ${loggedInUserEmail}`);
         currentUserType = loggedInUserType;
         currentUserEmail = loggedInUserEmail;
-        landingContent.style.display = 'none'; // Hide landing content if logged in
-        showDashboard(); // showDashboard will call loadUserNotifications and updateNotificationBadge and removeHeadingsAndLabels
-        checkDailyLoginPoints(); // Check for daily points on reload if already logged in
+        landingContent.style.display = 'none'; 
+        showDashboard(); 
+        checkDailyLoginPoints(); 
     } else {
         console.log("No stored user found. Displaying landing page.");
-        // Ensure globals are correctly reset if not logged in
         currentUserType = null;
         currentUserEmail = '';
-        userNotifications = []; // Clear notifications in memory if no user
-        removeHeadingsAndLabels(); // Apply label removal on initial load even if not logged in
+        userNotifications = []; 
+        removeTopBarHeadings(); // Initial call to remove headings for new users
     }
-    // Initial call to update badge on page load if user is already logged in
-    // This will run after showDashboard is potentially called, ensuring nav buttons exist.
-    // The call is now handled by showDashboard.
   </script>
 </body>
 </html>
