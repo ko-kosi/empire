@@ -25,9 +25,9 @@
     html, body {
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      height: 100%; /* Ensure html and body take full height */
       width: 100vw;
-      overflow: hidden; /* Prevent scrolling for the welcome screen */
+      overflow: hidden; /* Initial for welcome page to prevent scroll issues during animation */
       font-family: 'Inter', sans-serif; /* Default font for the entire app */
       color: var(--text); /* Default text color from main app */
     }
@@ -167,14 +167,21 @@
         100% { transform: rotate(360deg); }
     }
 
-
     /* Main App Content Styles */
+    /* New class for body when main app is active */
+    body.main-app-active {
+        overflow-y: auto; /* Allow scrolling on the body itself */
+        display: flex;
+        flex-direction: column; /* Main content flows vertically */
+    }
+
     #main-app-content {
       display: none; /* Hidden by default until welcome screen dismisses */
-      background: var(--background); /* Ensure consistent background for main app */
-      padding-top: 24px; /* Adjust as needed for top bar */
-      min-height: 100vh;
-      overflow-y: auto; /* Allow scrolling for main content */
+      background: var(--background); /* Consistent background for main app */
+      flex-grow: 1; /* Takes up available vertical space in body flex container */
+      padding-bottom: 90px; /* Space for the fixed bottom navigation */
+      box-sizing: border-box; /* Include padding in height calculation */
+      position: relative; /* Needed for sticky top bar to work within it */
     }
     .container {
       max-width: 420px;
@@ -183,7 +190,7 @@
       border-radius: 18px;
       box-shadow: 0 2px 16px #7c3aed22;
       padding: 28px 5vw 24px 5vw;
-      margin-top: 24px; /* Ensure space from top of main app content */
+      margin-top: 24px; /* Ensure space from top of main app content (or sticky header) */
       margin-bottom: 24px; /* Space before bottom nav */
     }
     h1 {
@@ -389,7 +396,7 @@
     .post-section {
       max-width: 420px;
       margin: 0 auto;
-      padding: 0 4vw 90px 4vw;
+      padding: 0 4vw 90px 4vw; /* Ensure padding for bottom nav */
       display: none;
     }
     .post-form {
@@ -477,23 +484,22 @@
     /* Bottom nav */
     .bottom-nav {
       position: fixed;
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%);
       bottom: 0;
       width: 100vw;
-      background: var(--white); /* Changed to solid white for better visibility over body background */
-      border-top: 1px solid var(--muted); /* Added border to separate from content */
+      background: var(--white);
+      border-top: 1px solid var(--muted);
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 0 0 8px 0;
       z-index: 100;
       height: 70px;
-      max-width: 420px; /* Constrain bottom nav width */
-      left: 50%;
-      transform: translateX(-50%); /* Center the bottom nav */
-      border-top-left-radius: 18px; /* Rounded corners for the bottom nav */
+      max-width: 420px;
+      border-top-left-radius: 18px;
       border-top-right-radius: 18px;
-      box-shadow: 0 -2px 16px #7c3aed22; /* Shadow for bottom nav */
+      box-shadow: 0 -2px 16px #7c3aed22;
     }
     .nav-btn {
       flex: 1;
@@ -543,7 +549,10 @@
       display: none;
       max-width: 420px;
       margin: 0 auto;
-      padding: 32px 0 90px 0;
+      padding: 0 0 0 0; /* Adjusted padding, will be handled by product lists */
+      width: 100%; /* Ensure it takes full width of its parent */
+      box-sizing: border-box; /* Include padding in height calculation */
+      flex-grow: 1; /* Allows it to expand within main-app-content */
     }
     .dashboard-section.active {
       display: block;
@@ -645,8 +654,8 @@
         }
     }
     @media (max-width: 600px) {
-      .container, .form-container, .dashboard, .post-section, .dashboard-section {
-        padding: 12px 2vw 12px 2vw;
+      .container, .form-container, .dashboard, .dashboard-section, .modal-form {
+        padding: 12px 2vw 12px 2vw; /* Adjusted for smaller screens */
         border-radius: 12px;
       }
       h1 { font-size: 1.3rem; }
@@ -732,6 +741,8 @@
       justify-content: center;
       gap: 12px;
       margin-bottom: 18px;
+      padding: 0 4vw; /* Ensure tabs are within bounds */
+      box-sizing: border-box;
     }
     .category-tab {
       background: none;
@@ -753,6 +764,7 @@
       flex-direction: column;
       gap: 18px;
       margin-top: 10px;
+      padding: 0 4vw; /* Consistent padding with browse list */
     }
     .product-card-stacked { /* Used for both seller's own products AND buyer's view */
       background: var(--white);
@@ -1132,7 +1144,7 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-        padding: 0 4vw 90px 4vw; /* Adjusted padding to be consistent */
+        padding: 0 4vw; /* Removed bottom padding, handled by main-app-content */
     }
     .buyer-product-card { /* Reusing product-card-stacked for consistency */
         background: var(--white);
@@ -1666,6 +1678,7 @@
         flex-direction: column;
         gap: 10px;
         margin-top: 20px;
+        padding: 0 4vw; /* Consistent padding */
     }
     .leaderboard-item {
         background: var(--white);
@@ -1705,10 +1718,6 @@
         font-weight: bold;
     }
 
-    img{
-      border-radius: 8px;
-    }
-
   </style>
 </head>
 <body>
@@ -1725,7 +1734,7 @@
 
       <div class="welcome-content">
           <div class="logo-box">
-              <img src="IMG-20250601-WA0018.jpg" alt="KnowEmpire Logo" onerror="this.src='https://placehold.co/100x100?text=KE_Logo_Fallback'">
+              <img src="https://assets.example.com/IMG-20250601-WA0018.jpg-2332a1ff-ba87-4e3f-ad40-2c90237e6272" alt="KnowEmpire Logo" onerror="this.src='https://placehold.co/100x100?text=KE_Logo_Fallback'">
           </div>
           <h1 class="welcome-title">KnowEmpire</h1>
           <p class="welcome-subtitle">The First P2P Marketplace Built on Farcaster</p>
@@ -1735,6 +1744,29 @@
 
   <!-- Main App Content - Initially Hidden -->
   <div id="main-app-content">
+    <!-- Top Bars for Sections - Now sticky and within main-app-content -->
+    <div class="section-top-bar" id="top-bar-post">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-browse-products">
+      <div class="title"></div> 
+    </div>
+    <div class="section-top-bar" id="top-bar-profile">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-leaderboard">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-referral">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-notifications">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-menu">
+      <div class="title"></div>
+    </div>
+
     <div class="container" id="landing-content">
       <h1>The First P2P Marketplace Built on Farcaster</h1>
       <div class="subtext">
@@ -1814,30 +1846,6 @@
         </form>
       </div>
     </div>
-
-    <!-- Top Bars for Sections -->
-    <div class="section-top-bar" id="top-bar-post">
-      <div class="title"></div>
-    </div>
-    <div class="section-top-bar" id="top-bar-browse-products">
-      <div class="title"></div> 
-    </div>
-    <div class="section-top-bar" id="top-bar-profile">
-      <div class="title"></div>
-    </div>
-    <div class="section-top-bar" id="top-bar-leaderboard">
-      <div class="title"></div>
-    </div>
-    <div class="section-top-bar" id="top-bar-referral">
-      <div class="title"></div>
-    </div>
-    <div class="section-top-bar" id="top-bar-notifications">
-      <div class="title"></div>
-    </div>
-    <div class="section-top-bar" id="top-bar-menu">
-      <div class="title"></div>
-    </div>
-
 
     <div class="dashboard-section" id="section-post">
       <div class="category-tabs" id="seller-category-tabs">
@@ -2236,7 +2244,7 @@
         welcomePageContainer.classList.add('hidden'); // Hide welcome page with transition
         // After transition, display main content and initialize main app
         welcomePageContainer.addEventListener('transitionend', () => {
-            document.body.style.overflow = 'auto'; // Re-enable scrolling for main content
+            document.body.classList.add('main-app-active'); // Add class to body for scrolling
             document.getElementById('main-app-content').style.display = 'block';
             initializeMainApp(); // Call the main app initialization
         }, { once: true });
@@ -2494,7 +2502,10 @@
       imagePreview.style.display = 'none';
       imagePreview.src = '';
       digitalTypeGroup.style.display = 'none'; // Hide digital specific fields on close
+      document.getElementById('digital-type').value = ''; // Reset digital type dropdown
+      document.getElementById('digital-type').removeAttribute('required'); // Remove required
       digitalFileSelect.value = '';
+      digitalFileSelect.removeAttribute('required'); // Remove required
       digitalFileNameDisplay.textContent = '';
     };
     closeProductDetailBtn.onclick = () => { productDetailModal.classList.remove('active'); };
@@ -2744,7 +2755,10 @@
         imagePreview.style.display = 'none';
         imagePreview.src = '';
         digitalTypeGroup.style.display = 'none';
+        document.getElementById('digital-type').value = ''; // Reset digital type dropdown
+        document.getElementById('digital-type').removeAttribute('required'); // Remove required
         digitalFileSelect.value = '';
+        digitalFileSelect.removeAttribute('required'); // Remove required
         digitalFileNameDisplay.textContent = '';
         postFormModal.classList.remove('active');
         showToast('Product posted successfully!', 'info'); 
@@ -3403,7 +3417,6 @@
                         userNotifications[index].isRead = true; 
                         localStorage.setItem(`notifications_${currentUserEmail}`, JSON.stringify(userNotifications));
                         renderNotifications(); 
-                        updateNotificationBadge(); 
                     };
                 }
             }
@@ -3415,7 +3428,7 @@
 
     // Function to update the notification badge
     function updateNotificationBadge() {
-        const notificationsBtn = document.getElementById('notification-btn');
+        const notificationsBtn = document.getElementById('nav-menu'); // Use the 'menu' nav button as the parent for the badge
         if (!notificationsBtn) {
             console.log("Notifications button not found, cannot update badge.");
             return; 
