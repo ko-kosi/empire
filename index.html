@@ -5,6 +5,11 @@
   <title>KnowEmpire Marketplace</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Combined font imports: Inter for general text, Montserrat for titles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --primary: #7c3aed;
@@ -20,10 +25,156 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: var(--background);
-      color: var(--text);
-      font-family: 'Segoe UI', Arial, sans-serif;
       min-height: 100vh;
+      width: 100vw;
+      overflow: hidden; /* Prevent scrolling for the welcome screen */
+      font-family: 'Inter', sans-serif; /* Default font for the entire app */
+      color: var(--text); /* Default text color from main app */
+    }
+
+    /* Welcome Page Styles */
+    .welcome-container {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute; /* Use absolute to cover the whole viewport */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1000; /* Ensure it's on top initially */
+      transition: opacity 0.5s ease-out; /* Smooth transition out */
+    }
+    .welcome-container.hidden {
+      opacity: 0;
+      pointer-events: none; /* Disable interactions when hidden */
+    }
+    .welcome-content {
+      z-index: 10;
+      position: relative;
+      text-align: center;
+      color: var(--white);
+      animation: fadeIn 1.5s ease-out forwards;
+      max-width: 90vw;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      animation: float 4s ease-in-out infinite;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .logo-box img {
+      max-width: 80%;
+      max-height: 80%;
+      object-fit: contain;
+      filter: none; /* Show original logo color */
+    }
+    .welcome-title {
+      font-family: 'Montserrat', sans-serif; /* Applied new font */
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      animation: float 4s ease-in-out infinite 0.5s;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      color: var(--white);
+    }
+    .welcome-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+      animation: fadeIn 2s ease-out forwards 0.5s;
+      opacity: 0;
+    }
+
+    /* Enter Button Styling */
+    .enter-button {
+      background-color: var(--warning); /* Using --warning for consistency */
+      color: var(--white);
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1.25rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      margin-top: 30px;
+      animation: fadeIn 2s ease-out forwards 0.8s;
+      opacity: 0;
+      border: none; /* Ensure no default button border */
+    }
+    .enter-button:hover {
+      background-color: #eab308; /* Darker accent on hover */
+      transform: translateY(-3px);
+    }
+
+    /* Animated Background Shapes */
+    .shape {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite alternate, spin 12s linear infinite;
+    }
+    .shape-small {
+      width: 80px; height: 80px; top: 10%; left: 5%; animation-delay: 0s;
+    }
+    .shape-medium-1 {
+      width: 120px; height: 120px; bottom: 15%; right: 10%; animation-delay: 1.5s; animation-duration: 7s;
+    }
+    .shape-medium-2 {
+      width: 100px; height: 100px; top: 20%; right: 20%; animation-delay: 2.5s; animation-duration: 5s; border-radius: 30%; background-color: rgba(255, 255, 255, 0.15);
+    }
+    .shape-large {
+      width: 150px; height: 150px; bottom: 5%; left: 20%; animation-delay: 3s; animation-duration: 8s; background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Canvas for Lightning */
+    .lightning-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* Behind main content */
+      pointer-events: none; /* Allows clicks to pass through */
+    }
+
+    /* Keyframe Animations (Combined) */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+
+    /* Main App Content Styles */
+    #main-app-content {
+      display: none; /* Hidden by default until welcome screen dismisses */
+      background: var(--background); /* Ensure consistent background for main app */
+      padding-top: 24px; /* Adjust as needed for top bar */
+      min-height: 100vh;
+      overflow-y: auto; /* Allow scrolling for main content */
     }
     .container {
       max-width: 420px;
@@ -32,7 +183,8 @@
       border-radius: 18px;
       box-shadow: 0 2px 16px #7c3aed22;
       padding: 28px 5vw 24px 5vw;
-      margin-top: 24px;
+      margin-top: 24px; /* Ensure space from top of main app content */
+      margin-bottom: 24px; /* Space before bottom nav */
     }
     h1 {
       font-size: 2rem;
@@ -241,7 +393,7 @@
       display: none;
     }
     .post-form {
-      background: #fff;
+      background: var(--white);
       border-radius: 16px;
       box-shadow: 0 2px 16px #7c3aed22;
       padding: 18px 14px 14px 14px;
@@ -249,7 +401,7 @@
     }
     .post-form label {
       font-size: 1rem;
-      color: #5b21b6;
+      color: var(--primary-dark);
       margin-bottom: 5px;
       display: block;
       font-weight: 500;
@@ -257,18 +409,18 @@
     .post-form input, .post-form textarea, .post-form select {
       width: 100%;
       padding: 10px;
-      border: 1px solid #a78bfa;
+      border: 1px solid var(--muted);
       border-radius: 8px;
       font-size: 1rem;
       margin-bottom: 14px;
-      background: #f8f6ff;
-      color: #222;
+      background: var(--background);
+      color: var(--text);
       box-sizing: border-box;
     }
     .post-form button {
       width: 100%;
-      background: #7c3aed;
-      color: #fff;
+      background: var(--primary);
+      color: var(--white);
       border: none;
       border-radius: 10px;
       font-size: 1.08rem;
@@ -278,13 +430,13 @@
       transition: background 0.2s;
     }
     .post-form button:active {
-      background: #5b21b6;
+      background: var(--primary-dark);
     }
     .product-list {
       margin-top: 10px;
     }
     .product-card {
-      background: #fff;
+      background: var(--white);
       border-radius: 12px;
       box-shadow: 0 1px 8px #7c3aed11;
       padding: 14px 12px 10px 12px;
@@ -296,7 +448,7 @@
     }
     .product-title {
       font-weight: bold;
-      color: #5b21b6;
+      color: var(--primary-dark);
       font-size: 1.08rem;
     }
     .product-desc {
@@ -306,7 +458,7 @@
     }
     .product-meta {
       font-size: 0.97rem;
-      color: #7c3aed;
+      color: var(--primary);
       margin-bottom: 4px;
     }
     .delete-btn {
@@ -320,7 +472,7 @@
       transition: color 0.2s;
     }
     .delete-btn:active {
-      color: #b91c1c;
+      color: var(--error);
     }
     /* Bottom nav */
     .bottom-nav {
@@ -328,14 +480,20 @@
       left: 0;
       bottom: 0;
       width: 100vw;
-      background: transparent;
-      border-top: none;
+      background: var(--white); /* Changed to solid white for better visibility over body background */
+      border-top: 1px solid var(--muted); /* Added border to separate from content */
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 0 0 8px 0;
       z-index: 100;
       height: 70px;
+      max-width: 420px; /* Constrain bottom nav width */
+      left: 50%;
+      transform: translateX(-50%); /* Center the bottom nav */
+      border-top-left-radius: 18px; /* Rounded corners for the bottom nav */
+      border-top-right-radius: 18px;
+      box-shadow: 0 -2px 16px #7c3aed22; /* Shadow for bottom nav */
     }
     .nav-btn {
       flex: 1;
@@ -398,7 +556,7 @@
       height: 56px;
       border-radius: 50%;
       background: var(--primary);
-      color: #fff;
+      color: var(--white);
       border: none;
       box-shadow: 0 2px 8px #7c3aed44;
       font-size: 2.3rem;
@@ -454,7 +612,7 @@
       object-fit: contain;
       border-radius: 10px;
       margin-bottom: 12px;
-      background: #f8f6ff;
+      background: var(--background);
       display: none;
     }
     .product-image {
@@ -464,10 +622,28 @@
       object-fit: contain;
       border-radius: 8px;
       margin-bottom: 8px;
-      background: #f8f6ff;
+      background: var(--background);
       display: block;
     }
     /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .welcome-title {
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+        }
+        .logo-box {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        .welcome-subtitle {
+            font-size: 1.1rem;
+        }
+        .enter-button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+        }
+    }
     @media (max-width: 600px) {
       .container, .form-container, .dashboard, .post-section, .dashboard-section {
         padding: 12px 2vw 12px 2vw;
@@ -475,14 +651,52 @@
       }
       h1 { font-size: 1.3rem; }
       h2 { font-size: 1.05rem; }
+      /* Further responsive adjustments for welcome page */
+      .welcome-title {
+          font-size: 2.5rem;
+          letter-spacing: 0.8px;
+      }
+      .logo-box {
+          width: 70px;
+          height: 70px;
+          margin-bottom: 10px;
+      }
+      .welcome-subtitle {
+          font-size: 1rem;
+          margin-bottom: 25px;
+      }
+      .enter-button {
+          padding: 10px 25px;
+          font-size: 1rem;
+      }
     }
+    @media (max-width: 480px) {
+      .welcome-title {
+          font-size: 2rem;
+          letter-spacing: 0.5px;
+      }
+      .logo-box {
+          width: 60px;
+          height: 60px;
+          margin-bottom: 10px;
+      }
+      .welcome-subtitle {
+          font-size: 0.9rem;
+          margin-bottom: 20px;
+      }
+      .enter-button {
+          padding: 8px 20px;
+          font-size: 0.9rem;
+      }
+    }
+
     .menu-item {
-      background: #fff;
+      background: var(--white);
       border: 1px solid #eee;
       border-radius: 10px;
       padding: 14px 18px;
       font-size: 1.07rem;
-      color: #2d1a4a;
+      color: var(--text);
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -524,15 +738,15 @@
       border: none;
       font-size: 1.08rem;
       font-weight: 600;
-      color: #5b21b6;
+      color: var(--primary-dark);
       padding: 8px 22px;
       border-radius: 22px;
       transition: background 0.18s, color 0.18s;
       cursor: pointer;
     }
     .category-tab.active {
-      background: #7c3aed;
-      color: #fff;
+      background: var(--primary);
+      color: var(--white);
     }
     .product-list-stacked {
       display: flex;
@@ -585,7 +799,7 @@
     }
     .badge.goods { background: #e0e7ff; color: #6366f1; }
     .badge.digital { background: #fef9c3; color: #eab308; }
-    .badge.services { background: #f3e8ff; color: #7c3aed; }
+    .badge.services { background: #f3e8ff; color: var(--primary); }
     .product-meta {
       font-size: 1rem;
       color: var(--primary-dark);
@@ -958,6 +1172,9 @@
         border-radius: 6px;
         font-weight: 500;
     }
+    .badge.goods { background: #e0e7ff; color: #6366f1; }
+    .badge.digital { background: #fef9c3; color: #eab308; }
+    .badge.services { background: #f3e8ff; color: var(--primary); }
     .buyer-product-card .product-meta {
         font-size: 1rem;
         color: var(--primary-dark);
@@ -1334,7 +1551,7 @@
       opacity: 1;
       transform: translateY(0);
     }
-    .toast-message.success { /* Kept for reference but changed to info in calls */
+    .toast-message.success {
         background-color: var(--success);
     }
     .toast-message.error {
@@ -1488,396 +1705,424 @@
         font-weight: bold;
     }
 
+    img{
+      border-radius: 8px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="container" id="landing-content">
-    <h1>The First P2P Marketplace Built on Farcaster</h1>
-    <div class="subtext">
-      Trade goods or services. Earn trustlessly. Powered by $KNOW & escrow.
-    </div>
-    <hr>
-    <div class="explainer">
-      <div>KnowEmpire connects buyers and sellers through a secure crypto-native experience.</div>
-      <div>Whether you're selling physical products, offering services, or just referring others — you earn through our trustless system.</div>
-    </div>
-    <hr>
-    <button class="cta-btn" id="waitlist-btn">Join the Waitlist</button>
-    <div id="waitlist-success" style="display:none; text-align:center; color:var(--primary-dark); font-weight:bold; margin-bottom:18px;">
-      🎉 You’ve joined the waitlist!
-    </div>
-    <div class="addon">
-      <span>Already a seller or service provider?</span>
-      <a id="open-registration">Register to Sell</a>
-      <button id="register-buyer" type="button">Register as Buyer</button>
-    </div>
-    <div class="footer">
-      $KNOW token live • Escrow powered • Built for the Farcaster community.
-    </div>
-  </div>
+  <!-- Welcome Page Content - Initially Visible -->
+  <div class="welcome-container" id="welcome-page-container">
+      <!-- Canvas for dynamic lightning strikes -->
+      <canvas id="lightningCanvas" class="lightning-canvas"></canvas>
 
-  <div class="modal-bg" id="registration-modal">
-    <div class="form-container">
-      <button class="close-btn" id="close-registration" title="Close">&times;</button>
-      <h2>🧾 Become a Seller</h2>
-      <form id="seller-form">
-        <label for="email">Email Address</label>
-        <input class="input" type="email" id="email" name="email" placeholder="your@email.com" required>
-        <label>What do you want to sell?</label>
-        <div class="radio-group">
-          <label><input type="radio" name="category" value="goods" required> Goods</label>
-          <label><input type="radio" name="category" value="digital"> Digital</label>
-          <label><input type="radio" name="category" value="services"> Services</label>
-        </div>
-        <label for="description">Describe your offer (1–2 sentences):</label>
-        <textarea id="description" name="description" rows="3" placeholder="Describe what you offer..." required></textarea>
-        <label for="portfolio">Portfolio or Sample Link</label>
-        <input class="input" type="url" id="portfolio" name="portfolio" placeholder="https://">
-        <label for="location">Where are you based?</label>
-        <select id="location" name="location" required>
-          <option value="">Select region</option>
-          <option value="africa">Africa</option>
-          <option value="europe">Europe</option>
-          <option value="asia">Asia</option>
-          <option value="north-america">North America</option>
-          <option value="south-america">South America</option>
-          <option value="australia">Australia</option>
-          <option value="antarctica">Antarctica</option>
-        </select>
-        <div class="checkbox-row">
-          <label>
-            <input type="checkbox" name="agreement" required>
-            I agree to deliver what I promise. I understand escrow protects both buyer and seller.
-          </label>
-        </div>
-        <button class="register-btn" type="submit">Register as Seller</button>
-      </form>
-    </div>
-  </div>
+      <!-- Animated background shapes -->
+      <div class="shape shape-small"></div>
+      <div class="shape shape-medium-1"></div>
+      <div class="shape shape-medium-2"></div>
+      <div class="shape shape-large"></div>
 
-  <div class="modal-bg" id="buyer-modal">
-    <div class="form-container">
-      <button class="close-btn" id="close-buyer" title="Close">&times;</button>
-      <h2>🛒 Register as Buyer</h2>
-      <form id="buyer-form">
-        <label for="buyer-email">Email Address</label>
-        <input class="input" type="email" id="buyer-email" name="buyer-email" placeholder="your@email.com" required>
-        <button class="register-btn" type="submit" style="margin-top:10px;">Register as Buyer</button>
-        <div id="buyer-success" style="display:none; text-align:center; color:var(--primary-dark); font-weight:bold; margin-top:14px;">
-          🎉 You’re registered as a buyer!<br>
-          <span id="buyer-countdown"></span>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Top Bars for Sections -->
-  <div class="section-top-bar" id="top-bar-post">
-    <div class="title"></div>
-  </div>
-  <div class="section-top-bar" id="top-bar-browse-products">
-    <div class="title"></div> 
-  </div>
-  <div class="section-top-bar" id="top-bar-profile">
-    <div class="title"></div>
-  </div>
-  <div class="section-top-bar" id="top-bar-leaderboard">
-    <div class="title"></div>
-  </div>
-  <div class="section-top-bar" id="top-bar-referral">
-    <div class="title"></div>
-  </div>
-  <div class="section-top-bar" id="top-bar-notifications">
-    <div class="title"></div>
-  </div>
-  <div class="section-top-bar" id="top-bar-menu">
-    <div class="title"></div>
-  </div>
-
-
-  <div class="dashboard-section" id="section-post">
-    <div class="category-tabs" id="seller-category-tabs">
-      <button class="category-tab active" data-category="goods">Goods</button>
-      <button class="category-tab" data-category="services">Services</button>
-      <button class="category-tab" data-category="digital">Digital</button>
-    </div>
-    <button class="fab" id="open-post-form" title="Add Product">
-      <span class="material-icons">add</span>
-    </button>
-    <div class="product-list-stacked" id="seller-product-list">
+      <div class="welcome-content">
+          <div class="logo-box">
+              <img src="IMG-20250601-WA0018.jpg" alt="KnowEmpire Logo" onerror="this.src='https://placehold.co/100x100?text=KE_Logo_Fallback'">
+          </div>
+          <h1 class="welcome-title">KnowEmpire</h1>
+          <p class="welcome-subtitle">The First P2P Marketplace Built on Farcaster</p>
+          <button class="enter-button" id="enter-marketplace-btn">Enter Marketplace</button>
       </div>
   </div>
 
-  <div class="dashboard-section" id="section-browse-products">
-    <div class="category-tabs" id="buyer-category-tabs">
-        <button class="category-tab active" data-category="all">All</button>
-        <button class="category-tab" data-category="goods">Goods</button>
+  <!-- Main App Content - Initially Hidden -->
+  <div id="main-app-content">
+    <div class="container" id="landing-content">
+      <h1>The First P2P Marketplace Built on Farcaster</h1>
+      <div class="subtext">
+        Trade goods or services. Earn trustlessly. Powered by $KNOW & escrow.
+      </div>
+      <hr>
+      <div class="explainer">
+        <div>KnowEmpire connects buyers and sellers through a secure crypto-native experience.</div>
+        <div>Whether you're selling physical products, offering services, or just referring others — you earn through our trustless system.</div>
+      </div>
+      <hr>
+      <button class="cta-btn" id="waitlist-btn">Join the Waitlist</button>
+      <div id="waitlist-success" style="display:none; text-align:center; color:var(--primary-dark); font-weight:bold; margin-bottom:18px;">
+        🎉 You’ve joined the waitlist!
+      </div>
+      <div class="addon">
+        <span>Already a seller or service provider?</span>
+        <a id="open-registration">Register to Sell</a>
+        <button id="register-buyer" type="button">Register as Buyer</button>
+      </div>
+      <div class="footer">
+        $KNOW token live • Escrow powered • Built for the Farcaster community.
+      </div>
+    </div>
+
+    <div class="modal-bg" id="registration-modal">
+      <div class="form-container">
+        <button class="close-btn" id="close-registration" title="Close">&times;</button>
+        <h2>🧾 Become a Seller</h2>
+        <form id="seller-form">
+          <label for="email">Email Address</label>
+          <input class="input" type="email" id="email" name="email" placeholder="your@email.com" required>
+          <label>What do you want to sell?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="category" value="goods" required> Goods</label>
+            <label><input type="radio" name="category" value="digital"> Digital</label>
+            <label><input type="radio" name="category" value="services"> Services</label>
+          </div>
+          <label for="description">Describe your offer (1–2 sentences):</label>
+          <textarea id="description" name="description" rows="3" placeholder="Describe what you offer..." required></textarea>
+          <label for="portfolio">Portfolio or Sample Link</label>
+          <input class="input" type="url" id="portfolio" name="portfolio" placeholder="https://">
+          <label for="location">Where are you based?</label>
+          <select id="location" name="location" required>
+            <option value="">Select region</option>
+            <option value="africa">Africa</option>
+            <option value="europe">Europe</option>
+            <option value="asia">Asia</option>
+            <option value="north-america">North America</option>
+            <option value="south-america">South America</option>
+            <option value="australia">Australia</option>
+            <option value="antarctica">Antarctica</option>
+          </select>
+          <div class="checkbox-row">
+            <label>
+              <input type="checkbox" name="agreement" required>
+              I agree to deliver what I promise. I understand escrow protects both buyer and seller.
+            </label>
+          </div>
+          <button class="register-btn" type="submit">Register as Seller</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-bg" id="buyer-modal">
+      <div class="form-container">
+        <button class="close-btn" id="close-buyer" title="Close">&times;</button>
+        <h2>🛒 Register as Buyer</h2>
+        <form id="buyer-form">
+          <label for="buyer-email">Email Address</label>
+          <input class="input" type="email" id="buyer-email" name="buyer-email" placeholder="your@email.com" required>
+          <button class="register-btn" type="submit" style="margin-top:10px;">Register as Buyer</button>
+          <div id="buyer-success" style="display:none; text-align:center; color:var(--primary-dark); font-weight:bold; margin-top:14px;">
+            🎉 You’re registered as a buyer!<br>
+            <span id="buyer-countdown"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Top Bars for Sections -->
+    <div class="section-top-bar" id="top-bar-post">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-browse-products">
+      <div class="title"></div> 
+    </div>
+    <div class="section-top-bar" id="top-bar-profile">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-leaderboard">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-referral">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-notifications">
+      <div class="title"></div>
+    </div>
+    <div class="section-top-bar" id="top-bar-menu">
+      <div class="title"></div>
+    </div>
+
+
+    <div class="dashboard-section" id="section-post">
+      <div class="category-tabs" id="seller-category-tabs">
+        <button class="category-tab active" data-category="goods">Goods</button>
         <button class="category-tab" data-category="services">Services</button>
         <button class="category-tab" data-category="digital">Digital</button>
-    </div>
-    <div class="buyer-product-list" id="all-products-list">
       </div>
-  </div>
+      <button class="fab" id="open-post-form" title="Add Product">
+        <span class="material-icons">add</span>
+      </button>
+      <div class="product-list-stacked" id="seller-product-list">
+        </div>
+    </div>
 
-  <div class="dashboard-section" id="section-profile">
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="profile-avatar-bg">
-          <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=remarkablesam" alt="Avatar" class="profile-avatar" id="profile-avatar">
+    <div class="dashboard-section" id="section-browse-products">
+      <div class="category-tabs" id="buyer-category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="goods">Goods</button>
+          <button class="category-tab" data-category="services">Services</button>
+          <button class="category-tab" data-category="digital">Digital</button>
+      </div>
+      <div class="buyer-product-list" id="all-products-list">
         </div>
-        <div class="profile-username" id="profile-username">@anonymous</div>
-        <div class="profile-wallet" id="profile-wallet" style="display:none;">
-          <span class="profile-wallet-icon material-icons">account_balance_wallet</span>
-          <span class="profile-wallet-text" id="wallet-address">UQC••••DEC</span>
-          <span class="profile-wallet-action material-icons" id="disconnect-wallet" title="Disconnect">logout</span>
-        </div>
-        <button class="connect-wallet-btn" id="connect-wallet-btn">Connect Farcaster Wallet</button>
-      </div>
-      <div class="profile-tabs">
-        <button class="profile-tab active">POINTS</button>
-        <button class="profile-tab">REWARDS</button>
-      </div>
-      <div class="profile-assets-title">Virtual assets</div>
-      <div class="profile-assets-sub">Trade for VT</div>
-      <div class="profile-assets-row">
-        <div class="profile-asset-card">
-          <img src="https://api.iconify.design/ph:egg.svg?color=%23000" class="profile-asset-icon" alt="Egg">
-          <div class="profile-asset-label">Know point</div>
-          <div class="profile-asset-value" id="know-points-display">0</div>
-        </div>
-        <div class="profile-asset-card">
-          <img src="https://api.iconify.design/ph:currency-circle-dollar.svg?color=%23000" class="profile-asset-icon" alt="USD">
-          <div class="profile-asset-label">Virtual USD</div>
-          <div class="profile-asset-value">$802,325.14</div>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="dashboard-section" id="section-leaderboard">
-    <h2 style="text-align:center; color:var(--primary-dark); margin-bottom:20px;">Top Know Points Holders</h2>
-    <div class="leaderboard-list" id="leaderboard-list">
-      <!-- Leaderboard items will be rendered here -->
-    </div>
-  </div>
-  <div class="dashboard-section" id="section-referral">
-    <div class="referral-bg">
-      <div class="referral-header" style="margin-bottom:5px;"> <!-- Adjusted margin -->
-        <img src="https://api.iconify.design/ph:alien-bold.svg?color=%23000" alt="Invite" class="referral-icon">
-        <div class="referral-title">INVITE FRENS</div> <!-- Restored text -->
-      </div>
-      <div class="referral-balance-box">
-        <span class="referral-balance">0 VT</span>
-        <button class="referral-claim-btn" disabled>CLAIM</button>
-      </div>
-      <div class="referral-desc">Score 5% from your buddies’ earned tokens + 1.25% from their referrals.</div> <!-- Restored text -->
-      <button class="referral-invite-btn">
-        <span class="material-icons" style="font-size:1.2em;vertical-align:middle;">card_giftcard</span>
-        <span style="margin-left:8px;">INVITE A FREN</span>
-      </button>
-    </div>
-  </div>
-  <div class="dashboard-section" id="section-notifications">
-    <div class="notification-list" id="notification-list">
-      <!-- Notifications will be rendered here -->
-      <div style="text-align: center; color: var(--muted); padding: 20px;">No new notifications.</div>
-    </div>
-  </div>
-  <div class="dashboard-section" id="section-menu">
-    <div class="menu-list" style="display: flex; flex-direction: column; gap: 18px; margin-top: 18px;">
-      <button class="menu-item" id="notification-btn" data-action="notifications">
-        <span class="material-icons" style="vertical-align:middle;">notifications</span>
-        <span style="margin-left:10px;">Notifications</span>
-        <span class="notification-badge"></span>
-      </button>
-      <button class="menu-item" id="view-products-btn" data-action="view-products">
-        <span class="material-icons" style="vertical-align:middle;">storefront</span>
-        <span style="margin-left:10px;">View Products (Buyer View)</span>
-      </button>
-      <button class="menu-item" id="search-id-button" data-action="search-id">
-        <span class="material-icons" style="vertical-align:middle;">search</span>
-        <span style="margin-left:10px;">Search by ID</span>
-      </button>
-      <button class="menu-item" id="support-btn" data-action="support">
-        <span class="material-icons" style="vertical-align:middle;">support_agent</span>
-        <span style="margin-left:10px;">Support</span>
-      </button>
-      <button class="menu-item" id="logout-btn" data-action="logout">
-        <span class="material-icons" style="vertical-align:middle;">logout</span>
-        <span style="margin-left:10px;">Logout</span>
-      </button>
-      <div style="text-align:center; color:#aaa; font-size:0.95rem; margin-top:10px;">
-        App version 1.0.0
-      </div>
-    </div>
-  </div>
 
-  <div class="modal-form-bg" id="post-form-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-post-form" title="Close">&times;</button>
-      <form id="product-form">
-        <label for="product-image">Image</label>
-        <input type="file" id="product-image" accept="image/*" style="margin-bottom:10px;">
-        <img id="image-preview" class="image-preview" alt="Preview">
-        <label for="product-name">Product Name</label>
-        <input id="product-name" required maxlength="40" placeholder="e.g. Handmade Wallet">
-        <label for="product-desc">Description</label>
-        <textarea id="product-desc" rows="3" placeholder="Describe what you offer..." required></textarea>
-        
-        <label for="product-price">Price ($KNOW)</label>
-        <input id="product-price" type="number" min="1" required placeholder="e.g. 50">
-        <label for="product-category">Category</label>
-        <select id="product-category" required>
-          <option value="">Select category</option>
-          <option value="goods">Goods</option>
-          <option value="services">Services</option>
-          <option value="digital">Digital</option>
-        </select>
-        <!-- Digital Product Type - dynamically shown/hidden -->
-        <div id="digital-type-group" style="display: none;">
-          <label for="digital-type">Digital Product Type</label>
-          <select id="digital-type">
-            <option value="">Select type</option>
-            <option value="ebook">Ebook</option>
-            <option value="software">Software</option>
-            <option value="online-course">Online Course</option>
-            <option value="digital-art">Digital Art</option>
-            <option value="audio">Audio</option>
-            <option value="templates-themes">Templates and Themes</option>
-            <option value="photo">Photo</option>
-            <option value="video">Video</option>
-            <option value="text">Text</option>
+    <div class="dashboard-section" id="section-profile">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar-bg">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=remarkablesam" alt="Avatar" class="profile-avatar" id="profile-avatar">
+          </div>
+          <div class="profile-username" id="profile-username">@anonymous</div>
+          <div class="profile-wallet" id="profile-wallet" style="display:none;">
+            <span class="profile-wallet-icon material-icons">account_balance_wallet</span>
+            <span class="profile-wallet-text" id="wallet-address">UQC••••DEC</span>
+            <span class="profile-wallet-action material-icons" id="disconnect-wallet" title="Disconnect">logout</span>
+          </div>
+          <button class="connect-wallet-btn" id="connect-wallet-btn">Connect Farcaster Wallet</button>
+        </div>
+        <div class="profile-tabs">
+          <button class="profile-tab active">POINTS</button>
+          <button class="profile-tab">REWARDS</button>
+        </div>
+        <div class="profile-assets-title">Virtual assets</div>
+        <div class="profile-assets-sub">Trade for VT</div>
+        <div class="profile-assets-row">
+          <div class="profile-asset-card">
+            <img src="https://api.iconify.design/ph:egg.svg?color=%23000" class="profile-asset-icon" alt="Egg">
+            <div class="profile-asset-label">Know point</div>
+            <div class="profile-asset-value" id="know-points-display">0</div>
+          </div>
+          <div class="profile-asset-card">
+            <img src="https://api.iconify.design/ph:currency-circle-dollar.svg?color=%23000" class="profile-asset-icon" alt="USD">
+            <div class="profile-asset-label">Virtual USD</div>
+            <div class="profile-asset-value">$802,325.14</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-section" id="section-leaderboard">
+      <h2 style="text-align:center; color:var(--primary-dark); margin-bottom:20px;">Top Know Points Holders</h2>
+      <div class="leaderboard-list" id="leaderboard-list">
+        <!-- Leaderboard items will be rendered here -->
+      </div>
+    </div>
+    <div class="dashboard-section" id="section-referral">
+      <div class="referral-bg">
+        <div class="referral-header" style="margin-bottom:5px;"> <!-- Adjusted margin -->
+          <img src="https://api.iconify.design/ph:alien-bold.svg?color=%23000" alt="Invite" class="referral-icon">
+          <div class="referral-title">INVITE FRENS</div> <!-- Restored text -->
+        </div>
+        <div class="referral-balance-box">
+          <span class="referral-balance">0 VT</span>
+          <button class="referral-claim-btn" disabled>CLAIM</button>
+        </div>
+        <div class="referral-desc">Score 5% from your buddies’ earned tokens + 1.25% from their referrals.</div> <!-- Restored text -->
+        <button class="referral-invite-btn">
+          <span class="material-icons" style="font-size:1.2em;vertical-align:middle;">card_giftcard</span>
+          <span style="margin-left:8px;">INVITE A FREN</span>
+        </button>
+      </div>
+    </div>
+    <div class="dashboard-section" id="section-notifications">
+      <div class="notification-list" id="notification-list">
+        <!-- Notifications will be rendered here -->
+        <div style="text-align: center; color: var(--muted); padding: 20px;">No new notifications.</div>
+      </div>
+    </div>
+    <div class="dashboard-section" id="section-menu">
+      <div class="menu-list" style="display: flex; flex-direction: column; gap: 18px; margin-top: 18px;">
+        <button class="menu-item" id="notification-btn" data-action="notifications">
+          <span class="material-icons" style="vertical-align:middle;">notifications</span>
+          <span style="margin-left:10px;">Notifications</span>
+          <span class="notification-badge"></span>
+        </button>
+        <button class="menu-item" id="view-products-btn" data-action="view-products">
+          <span class="material-icons" style="vertical-align:middle;">storefront</span>
+          <span style="margin-left:10px;">View Products (Buyer View)</span>
+        </button>
+        <button class="menu-item" id="search-id-button" data-action="search-id">
+          <span class="material-icons" style="vertical-align:middle;">search</span>
+          <span style="margin-left:10px;">Search by ID</span>
+        </button>
+        <button class="menu-item" id="support-btn" data-action="support">
+          <span class="material-icons" style="vertical-align:middle;">support_agent</span>
+          <span style="margin-left:10px;">Support</span>
+        </button>
+        <button class="menu-item" id="logout-btn" data-action="logout">
+          <span class="material-icons" style="vertical-align:middle;">logout</span>
+          <span style="margin-left:10px;">Logout</span>
+        </button>
+        <div style="text-align:center; color:#aaa; font-size:0.95rem; margin-top:10px;">
+          App version 1.0.0
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-form-bg" id="post-form-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-post-form" title="Close">&times;</button>
+        <form id="product-form">
+          <label for="product-image">Image</label>
+          <input type="file" id="product-image" accept="image/*" style="margin-bottom:10px;">
+          <img id="image-preview" class="image-preview" alt="Preview">
+          <label for="product-name">Product Name</label>
+          <input id="product-name" required maxlength="40" placeholder="e.g. Handmade Wallet">
+          <label for="product-desc">Description</label>
+          <textarea id="product-desc" rows="3" placeholder="Describe what you offer..." required></textarea>
+          
+          <label for="product-price">Price ($KNOW)</label>
+          <input id="product-price" type="number" min="1" required placeholder="e.g. 50">
+          <label for="product-category">Category</label>
+          <select id="product-category" required>
+            <option value="">Select category</option>
+            <option value="goods">Goods</option>
+            <option value="services">Services</option>
+            <option value="digital">Digital</option>
           </select>
-          <label for="digital-file">Digital File Upload</label>
-          <input type="file" id="digital-file" accept=".pdf,.zip,.epub,.mp3,.mp4,.jpg,.png,.txt,.doc" style="margin-bottom:10px;">
-          <div id="digital-file-name" style="font-size:0.9rem; color:var(--muted); margin-bottom:10px;"></div>
+          <!-- Digital Product Type - dynamically shown/hidden -->
+          <div id="digital-type-group" style="display: none;">
+            <label for="digital-type">Digital Product Type</label>
+            <select id="digital-type">
+              <option value="">Select type</option>
+              <option value="ebook">Ebook</option>
+              <option value="software">Software</option>
+              <option value="online-course">Online Course</option>
+              <option value="digital-art">Digital Art</option>
+              <option value="audio">Audio</option>
+              <option value="templates-themes">Templates and Themes</option>
+              <option value="photo">Photo</option>
+              <option value="video">Video</option>
+              <option value="text">Text</option>
+            </select>
+            <label for="digital-file">Digital File Upload</label>
+            <input type="file" id="digital-file" accept=".pdf,.zip,.epub,.mp3,.mp4,.jpg,.png,.txt,.doc" style="margin-bottom:10px;">
+            <div id="digital-file-name" style="font-size:0.9rem; color:var(--muted); margin-bottom:10px;"></div>
+          </div>
+
+          <label for="product-location">Location</label>
+          <input id="product-location" required maxlength="40" placeholder="e.g. New York, NY">
+          <button type="submit" class="register-btn" style="margin-top:10px;">Post Product</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-form-bg" id="product-detail-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-product-detail" title="Close">&times;</button>
+        <img src="" alt="Product Image" class="product-detail-img" id="detail-product-image">
+        <div class="product-detail-title" id="detail-product-name"></div>
+        <div class="product-detail-price" id="detail-product-price"></div>
+        <div class="product-detail-desc" id="detail-product-desc"></div>
+        <div class="product-detail-meta" id="detail-product-meta"></div>
+        <button class="buy-now-btn">Buy Now</button>
+      </div>
+    </div>
+
+    <!-- Goods Chat/Quantity Modal -->
+    <div class="modal-form-bg" id="goods-chat-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-goods-chat" title="Close">&times;</button>
+        <h2>Chat with Seller</h2>
+        <div class="product-info-mini">
+          <img id="goods-chat-img" src="" alt="Product Image">
+          <div class="name" id="goods-chat-name"></div>
+          <div class="details" id="goods-chat-details"></div>
         </div>
-
-        <label for="product-location">Location</label>
-        <input id="product-location" required maxlength="40" placeholder="e.g. New York, NY">
-        <button type="submit" class="register-btn" style="margin-top:10px;">Post Product</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-form-bg" id="product-detail-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-product-detail" title="Close">&times;</button>
-      <img src="" alt="Product Image" class="product-detail-img" id="detail-product-image">
-      <div class="product-detail-title" id="detail-product-name"></div>
-      <div class="product-detail-price" id="detail-product-price"></div>
-      <div class="product-detail-desc" id="detail-product-desc"></div>
-      <div class="product-detail-meta" id="detail-product-meta"></div>
-      <button class="buy-now-btn">Buy Now</button>
-    </div>
-  </div>
-
-  <!-- Goods Chat/Quantity Modal -->
-  <div class="modal-form-bg" id="goods-chat-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-goods-chat" title="Close">&times;</button>
-      <h2>Chat with Seller</h2>
-      <div class="product-info-mini">
-        <img id="goods-chat-img" src="" alt="Product Image">
-        <div class="name" id="goods-chat-name"></div>
-        <div class="details" id="goods-chat-details"></div>
-      </div>
-      <div class="quantity-selector">
-        <button id="qty-minus">-</button>
-        <span class="quantity-display" id="goods-qty">1</span>
-        <button id="qty-plus">+</button>
-      </div>
-      <div class="current-total-price" id="goods-total-price">$0 KNOW</div>
-      <div class="modal-footer-btns">
-        <button class="cta-btn" id="goods-chat-continue-btn">Continue</button>
+        <div class="quantity-selector">
+          <button id="qty-minus">-</button>
+          <span class="quantity-display" id="goods-qty">1</span>
+          <button id="qty-plus">+</button>
+        </div>
+        <div class="current-total-price" id="goods-total-price">$0 KNOW</div>
+        <div class="modal-footer-btns">
+          <button class="cta-btn" id="goods-chat-continue-btn">Continue</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Digital Buy Modal -->
-  <div class="modal-form-bg" id="digital-buy-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-digital-buy" title="Close">&times;</button>
-      <h2>Digital Product</h2>
-      <div class="product-info-mini">
-        <img id="digital-buy-img" src="" alt="Product Image">
-        <div class="name" id="digital-buy-name"></div>
-        <div class="details" id="digital-buy-details"></div>
-      </div>
-      <div class="modal-footer-btns">
-        <button class="cta-btn" id="digital-buy-btn">Buy ($<span id="digital-buy-price">0</span> KNOW)</button>
-        <div class="payment-success-message" id="digital-payment-success" style="display:none;">Payment Successful!</div>
-        <div class="payment-id-display" id="digital-payment-id" style="display:none;"></div>
-        <button class="cta-btn" id="digital-download-btn" style="display:none;">Download Product</button>
+    <!-- Digital Buy Modal -->
+    <div class="modal-form-bg" id="digital-buy-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-digital-buy" title="Close">&times;</button>
+        <h2>Digital Product</h2>
+        <div class="product-info-mini">
+          <img id="digital-buy-img" src="" alt="Product Image">
+          <div class="name" id="digital-buy-name"></div>
+          <div class="details" id="digital-buy-details"></div>
+        </div>
+        <div class="modal-footer-btns">
+          <button class="cta-btn" id="digital-buy-btn">Buy ($<span id="digital-buy-price">0</span> KNOW)</button>
+          <div class="payment-success-message" id="digital-payment-success" style="display:none;">Payment Successful!</div>
+          <div class="payment-id-display" id="digital-payment-id" style="display:none;"></div>
+          <button class="cta-btn" id="digital-download-btn" style="display:none;">Download Product</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Service Agree Modal -->
-  <div class="modal-form-bg" id="service-agree-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-service-agree" title="Close">&times;</button>
-      <h2>Service Request</h2>
-      <div class="product-info-mini">
-        <img id="service-agree-img" src="" alt="Product Image">
-        <div class="name" id="service-agree-name"></div>
-        <div class="details" id="service-agree-details"></div>
-      </div>
-      <label for="service-date">Preferred Date</label>
-      <input class="input" type="date" id="service-date" required>
-      <label for="service-start-time">Start Time</label>
-      <input class="input" type="time" id="service-start-time" required>
-      <label for="service-end-time">End Time</label>
-      <input class="input" type="time" id="service-end-time" required>
-      <label for="service-location-input">Location for Work</label>
-      <input class="input" type="text" id="service-location-input" placeholder="e.g. Client's address, Online" required>
-      <div class="modal-footer-btns">
-        <button class="cta-btn" id="service-agree-send-btn">Agree & Send Request</button>
+    <!-- Service Agree Modal -->
+    <div class="modal-form-bg" id="service-agree-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-service-agree" title="Close">&times;</button>
+        <h2>Service Request</h2>
+        <div class="product-info-mini">
+          <img id="service-agree-img" src="" alt="Product Image">
+          <div class="name" id="service-agree-name"></div>
+          <div class="details" id="service-agree-details"></div>
+        </div>
+        <label for="service-date">Preferred Date</label>
+        <input class="input" type="date" id="service-date" required>
+        <label for="service-start-time">Start Time</label>
+        <input class="input" type="time" id="service-start-time" required>
+        <label for="service-end-time">End Time</label>
+        <input class="input" type="time" id="service-end-time" required>
+        <label for="service-location-input">Location for Work</label>
+        <input class="input" type="text" id="service-location-input" placeholder="e.g. Client's address, Online" required>
+        <div class="modal-footer-btns">
+          <button class="cta-btn" id="service-agree-send-btn">Agree & Send Request</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Goods Buy Now Modal -->
-  <div class="modal-form-bg" id="goods-buy-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-goods-buy" title="Close">&times;</button>
-      <h2>Confirm Purchase</h2>
-      <div class="product-info-mini">
-        <img id="goods-buy-img" src="" alt="Product Image">
-        <div class="name" id="goods-buy-name"></div>
-        <div class="details" id="goods-buy-details"></div>
-      </div>
-      <div class="quantity-selector">
-        <button id="goods-buy-qty-minus">-</button>
-        <span class="quantity-display" id="goods-buy-qty">1</span>
-        <button id="goods-buy-qty-plus">+</button>
-      </div>
-      <div class="current-total-price" id="goods-buy-total-price">$0 KNOW</div>
-      <div class="modal-footer-btns">
-        <button class="cta-btn" id="goods-buy-confirm-btn">Proceed to Pay</button>
-        <div class="payment-success-message" id="goods-payment-success" style="display:none;">Payment Successful!</div>
-        <div class="payment-id-display" id="goods-payment-id" style="display:none;"></div>
-        <button class="cta-btn" id="print-receipt-btn" style="display:none;">Print Receipt</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Search Modal -->
-  <div class="modal-bg" id="search-modal">
-    <div class="modal-form">
-      <button class="close-btn" id="close-search-modal" title="Close">&times;</button>
-      <h2>🔎 Search by ID</h2>
-      <p style="text-align:center; color:var(--text); font-size:0.95rem; margin-bottom:15px;">Enter a Product ID or a Transaction ID (e.g., PROD-ABCDEF, PAY-12345)</p>
-      <input class="input" type="text" id="search-input" placeholder="Enter ID here..." required>
-      <button class="register-btn" id="perform-search-btn">Search</button>
-      <div id="search-results-content" class="search-results-content">
-        <!-- Search results will be displayed here -->
+    <!-- Goods Buy Now Modal -->
+    <div class="modal-form-bg" id="goods-buy-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-goods-buy" title="Close">&times;</button>
+        <h2>Confirm Purchase</h2>
+        <div class="product-info-mini">
+          <img id="goods-buy-img" src="" alt="Product Image">
+          <div class="name" id="goods-buy-name"></div>
+          <div class="details" id="goods-buy-details"></div>
+        </div>
+        <div class="quantity-selector">
+          <button id="goods-buy-qty-minus">-</button>
+          <span class="quantity-display" id="goods-buy-qty">1</span>
+          <button id="goods-buy-qty-plus">+</button>
+        </div>
+        <div class="current-total-price" id="goods-buy-total-price">$0 KNOW</div>
+        <div class="modal-footer-btns">
+          <button class="cta-btn" id="goods-buy-confirm-btn">Proceed to Pay</button>
+          <div class="payment-success-message" id="goods-payment-success" style="display:none;">Payment Successful!</div>
+          <div class="payment-id-display" id="goods-payment-id" style="display:none;"></div>
+          <button class="cta-btn" id="print-receipt-btn" style="display:none;">Print Receipt</button>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Search Modal -->
+    <div class="modal-bg" id="search-modal">
+      <div class="modal-form">
+        <button class="close-btn" id="close-search-modal" title="Close">&times;</button>
+        <h2>🔎 Search by ID</h2>
+        <p style="text-align:center; color:var(--text); font-size:0.95rem; margin-bottom:15px;">Enter a Product ID or a Transaction ID (e.g., PROD-ABCDEF, PAY-12345)</p>
+        <input class="input" type="text" id="search-input" placeholder="Enter ID here..." required>
+        <button class="register-btn" id="perform-search-btn">Search</button>
+        <div id="search-results-content" class="search-results-content">
+          <!-- Search results will be displayed here -->
+        </div>
+      </div>
+    </div>
 
 
-  <div class="bottom-nav" id="bottom-nav" style="display:none;">
-  </div>
+    <div class="bottom-nav" id="bottom-nav" style="display:none;">
+    </div>
+  </div> <!-- End of #main-app-content -->
 
   <!-- Global Toast Container -->
   <div id="toast-container"></div>
@@ -1983,7 +2228,155 @@
         }
     }
 
-    // --- Modal Elements and Logic ---
+    // --- Welcome Page Specific Elements and Logic ---
+    const welcomePageContainer = document.getElementById('welcome-page-container');
+    const enterMarketplaceBtn = document.getElementById('enter-marketplace-btn');
+
+    enterMarketplaceBtn.onclick = function() {
+        welcomePageContainer.classList.add('hidden'); // Hide welcome page with transition
+        // After transition, display main content and initialize main app
+        welcomePageContainer.addEventListener('transitionend', () => {
+            document.body.style.overflow = 'auto'; // Re-enable scrolling for main content
+            document.getElementById('main-app-content').style.display = 'block';
+            initializeMainApp(); // Call the main app initialization
+        }, { once: true });
+    };
+
+    // Canvas setup for lightning animation (moved from welcome page)
+    const lightningCanvas = document.getElementById("lightningCanvas");
+    const ctx = lightningCanvas.getContext("2d");
+
+    // Set initial canvas dimensions based on parent container
+    const setCanvasDimensions = () => {
+        lightningCanvas.width = lightningCanvas.clientWidth;
+        lightningCanvas.height = lightningCanvas.clientHeight;
+    };
+
+    // Call initially and on resize
+    setCanvasDimensions();
+    window.addEventListener("resize", setCanvasDimensions);
+
+    const LEFT = "LEFT";
+    const RIGHT = "RIGHT";
+
+    const getDir = () => {
+        const dec = Math.floor(Math.random() * 30);
+        if (dec < 16) return LEFT;
+        else return RIGHT;
+    };
+
+    class Cloud {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.size = Math.floor(Math.random() * 30);
+            this.clr = "transparent"; // Make cloud transparent
+            this.dir = getDir();
+            this.speed = Math.floor(Math.random() * 2) + 1;
+        }
+        moveLeft() {
+            this.x -= this.speed;
+        }
+        moveRight() {
+            this.x += this.speed;
+        }
+        update() {
+            if (this.x <= 0) {
+                this.dir = RIGHT;
+            } else if (this.x >= lightningCanvas.width) {
+                this.dir = LEFT;
+            }
+
+            if (this.dir === LEFT) {
+                this.moveLeft();
+            } else {
+                this.moveRight();
+            }
+        }
+        drawRoot(x, y) {
+            let sx = x,
+                sy = y,
+                ex = sx + Math.floor(Math.random() * 50) - 15,
+                ey = sy + Math.floor(Math.random() * 30);
+            let i = 0,
+                limit = Math.floor(Math.random() * 20);
+            while (i < limit) {
+                ctx.beginPath();
+                ctx.strokeStyle = "silver";
+                ctx.lineWidth = 1;
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(ex, ey);
+                ctx.stroke();
+                sx = ex;
+                sy = ey;
+                ex = sx + Math.floor(Math.random() * 30) - 15;
+                ey = sy + Math.floor(Math.random() * 30);
+                i++;
+            }
+        }
+        drawLightning() {
+            // This creates a subtle background flash across the canvas
+            ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+            ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+            let sx = this.x,
+                sy = this.y,
+                ex = sx + Math.floor(Math.random() * 30) - 15,
+                ey = sy + Math.floor(Math.random() * 30);
+
+            let i = 0,
+                limit = Math.floor(Math.random() * 20) + 10;
+
+            while (i < limit) {
+                ctx.beginPath();
+                ctx.strokeStyle = "silver"; /* Color of the lightning bolt */
+                ctx.lineWidth = 3;
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(ex, ey);
+                ctx.stroke();
+                sx = ex;
+                sy = ey;
+                ex = sx + Math.floor(Math.random() * 30) - 15;
+                ey = sy + Math.floor(Math.random() * 30);
+                let root = Math.floor(Math.random() * 1000);
+                if (root < 50) {
+                    this.drawRoot(sx, sy);
+                }
+                i++;
+            }
+        }
+        draw() {
+            const strike = Math.floor(Math.random() * 100000);
+
+            if (strike < 100) { /* Adjust this value for more/fewer strikes */
+                this.drawLightning();
+            }
+        }
+    }
+
+    const clouds = [];
+
+    let i = 0;
+    // Start clouds from random top positions to simulate strikes from different points
+    while (i < lightningCanvas.width) {
+        clouds.push(new Cloud(i, Math.floor(Math.random() * 50))); // Random initial Y for variety
+        i += Math.floor(Math.random() * 10) + 1;
+    }
+
+    const animateLightning = () => {
+        ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height); // Clear the canvas each frame
+        ctx.shadowColor = "aliceblue";
+        ctx.shadowBlur = 10;
+
+        for (let c of clouds) {
+            c.draw();
+            c.update();
+        }
+
+        requestAnimationFrame(animateLightning);
+    };
+
+    // --- Main App Modal Elements and Logic ---
     const landingContent = document.getElementById('landing-content');
     const bottomNav = document.getElementById('bottom-nav');
 
@@ -2001,7 +2394,7 @@
 
     // Product Posting Modal
     const openPostFormBtn = document.getElementById('open-post-form');
-    const postFormModal = document = document.getElementById('post-form-modal');
+    const postFormModal = document.getElementById('post-form-modal');
     const closePostFormBtn = document.getElementById('close-post-form');
     const productForm = document.getElementById('product-form');
     const imageInput = document.getElementById('product-image');
@@ -3349,37 +3742,43 @@
         });
     }
 
-    // --- Initialization on Load ---
-    console.log("Initial load check: Showing landing content by default.");
-    landingContent.style.display = 'block';
-    bottomNav.style.display = 'none';
-    document.querySelectorAll('.dashboard-section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('.section-top-bar').forEach(bar => bar.style.display = 'none');
+    // --- Main App Initialization Function ---
+    function initializeMainApp() {
+        console.log("initializeMainApp called.");
+        const storedUserType = localStorage.getItem('currentUserType');
+        const storedUserEmail = localStorage.getItem('currentUserEmail');
 
+        let loggedInUserType = (storedUserType === "null" || storedUserType === null) ? null : storedUserType;
+        let loggedInUserEmail = (storedUserEmail === "null" || storedUserEmail === null) ? '' : storedUserEmail;
+        console.log('Main app init. storedUserEmail:', storedUserEmail, 'storedUserType:', storedUserType);
+        console.log('Main app init. loggedInUserEmail:', loggedInUserEmail, 'loggedInUserType:', loggedInUserType);
 
-    const storedUserType = localStorage.getItem('currentUserType');
-    const storedUserEmail = localStorage.getItem('currentUserEmail');
-
-    let loggedInUserType = (storedUserType === "null" || storedUserType === null) ? null : storedUserType;
-    let loggedInUserEmail = (storedUserEmail === "null" || storedUserEmail === null) ? '' : storedUserEmail;
-    console.log('Initial load. storedUserEmail:', storedUserEmail, 'storedUserType:', storedUserType);
-    console.log('Initial load. loggedInUserEmail:', loggedInUserEmail, 'loggedInUserType:', loggedInUserType);
-
-
-    if (loggedInUserType && loggedInUserEmail) {
-        console.log(`Stored user found: Type = ${loggedInUserType}, Email = ${loggedInUserEmail}`);
-        currentUserType = loggedInUserType;
-        currentUserEmail = loggedInUserEmail;
-        landingContent.style.display = 'none'; 
-        showDashboard(); 
-        checkDailyLoginPoints(); 
-    } else {
-        console.log("No stored user found. Displaying landing page.");
-        currentUserType = null;
-        currentUserEmail = '';
-        userNotifications = []; 
-        removeTopBarHeadings(); // Initial call to remove headings for new users
+        if (loggedInUserType && loggedInUserEmail) {
+            console.log(`Stored user found: Type = ${loggedInUserType}, Email = ${loggedInUserEmail}`);
+            currentUserType = loggedInUserType;
+            currentUserEmail = loggedInUserEmail;
+            landingContent.style.display = 'none'; 
+            showDashboard(); 
+            checkDailyLoginPoints(); 
+        } else {
+            console.log("No stored user found for main app. Displaying landing page for registration.");
+            currentUserType = null;
+            currentUserEmail = '';
+            userNotifications = []; 
+            removeTopBarHeadings(); 
+            landingContent.style.display = 'block'; // Ensure landing content is visible for registration
+            bottomNav.style.display = 'none'; // Ensure bottom nav is hidden
+        }
     }
+
+
+    // --- Overall Page Load Logic ---
+    window.onload = function() {
+        animateLightning(); // Start the lightning animation
+        // The main app content is initially hidden and will be revealed by clicking "Enter Marketplace"
+        // This ensures the welcome page is fully rendered before any main app logic begins.
+        // `initializeMainApp()` will be called by `enterMarketplaceBtn` click event.
+    };
   </script>
 </body>
 </html>
